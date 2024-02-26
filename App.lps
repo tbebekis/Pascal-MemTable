@@ -8,19 +8,21 @@
       <Unit>
         <Filename Value="App.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="1"/>
-        <UsageCount Value="20"/>
+        <EditorIndex Value="4"/>
+        <CursorPos X="29" Y="10"/>
+        <UsageCount Value="22"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="frm_mainform.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="MainForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_MainForm"/>
-        <IsVisibleTab Value="True"/>
-        <CursorPos X="65" Y="26"/>
-        <UsageCount Value="20"/>
+        <TopLine Value="37"/>
+        <CursorPos X="43" Y="55"/>
+        <UsageCount Value="22"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -28,14 +30,202 @@
         <Filename Value="o_memtable.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="o_MemTable"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="85"/>
-        <CursorPos X="51" Y="96"/>
-        <UsageCount Value="20"/>
+        <EditorIndex Value="8"/>
+        <TopLine Value="225"/>
+        <CursorPos X="19" Y="243"/>
+        <UsageCount Value="22"/>
         <Loaded Value="True"/>
       </Unit>
+      <Unit>
+        <Filename Value="frm_simpleform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="SimpleForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="58"/>
+        <CursorPos X="7" Y="72"/>
+        <UsageCount Value="22"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\lcl\forms.pp"/>
+        <UnitName Value="Forms"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="931"/>
+        <CursorPos X="40" Y="939"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\lcl\include\application.inc"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="2216"/>
+        <CursorPos X="53" Y="2234"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="G:\My Drive\Dev\Lazarus\MemTable2\o_memtable.pas"/>
+        <UnitName Value="o_MemTable"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="15"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="G:\My Drive\Dev\Lazarus\MemTable2\frm_main.pas"/>
+        <ComponentName Value="MainForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="frm_Main"/>
+        <EditorIndex Value="7"/>
+        <TopLine Value="59"/>
+        <CursorPos Y="67"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="o_app.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="o_App"/>
+        <EditorIndex Value="3"/>
+        <CursorPos X="38" Y="24"/>
+        <UsageCount Value="21"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="frm_masterdetailform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="MasterDetailForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="92"/>
+        <CursorPos X="81" Y="117"/>
+        <UsageCount Value="21"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit>
     </Units>
-    <JumpHistory HistoryIndex="-1"/>
+    <JumpHistory HistoryIndex="28">
+      <Position>
+        <Filename Value="frm_mainform.pas"/>
+        <Caret Line="18" Column="32"/>
+      </Position>
+      <Position>
+        <Filename Value="C:\lazarus\lcl\forms.pp"/>
+        <Caret Line="1601" Column="15" TopLine="1583"/>
+      </Position>
+      <Position>
+        <Filename Value="frm_mainform.pas"/>
+        <Caret Line="41" Column="3" TopLine="8"/>
+      </Position>
+      <Position>
+        <Filename Value="C:\lazarus\lcl\forms.pp"/>
+        <Caret Line="839" Column="3" TopLine="819"/>
+      </Position>
+      <Position>
+        <Filename Value="C:\lazarus\lcl\forms.pp"/>
+        <Caret Line="300" Column="83" TopLine="291"/>
+      </Position>
+      <Position>
+        <Filename Value="frm_mainform.pas"/>
+        <Caret Line="16" Column="41"/>
+      </Position>
+      <Position>
+        <Filename Value="frm_mainform.pas"/>
+        <Caret Line="11" Column="44"/>
+      </Position>
+      <Position>
+        <Filename Value="frm_mainform.pas"/>
+        <Caret Line="43" Column="4" TopLine="29"/>
+      </Position>
+      <Position>
+        <Filename Value="o_app.pas"/>
+        <Caret Line="23" Column="52"/>
+      </Position>
+      <Position>
+        <Filename Value="o_memtable.pas"/>
+        <Caret Line="244" Column="26" TopLine="227"/>
+      </Position>
+      <Position>
+        <Filename Value="o_memtable.pas"/>
+        <Caret Line="1752" Column="31" TopLine="1720"/>
+      </Position>
+      <Position>
+        <Filename Value="o_memtable.pas"/>
+        <Caret Line="1768" Column="27" TopLine="1736"/>
+      </Position>
+      <Position>
+        <Filename Value="o_memtable.pas"/>
+        <Caret Line="244" Column="18" TopLine="227"/>
+      </Position>
+      <Position>
+        <Filename Value="o_memtable.pas"/>
+        <Caret Line="1748" Column="60" TopLine="1727"/>
+      </Position>
+      <Position>
+        <Filename Value="o_memtable.pas"/>
+        <Caret Line="1768" Column="30" TopLine="1736"/>
+      </Position>
+      <Position>
+        <Filename Value="o_memtable.pas"/>
+        <Caret Line="244" Column="30" TopLine="226"/>
+      </Position>
+      <Position>
+        <Filename Value="o_memtable.pas"/>
+        <Caret Line="243" Column="28" TopLine="225"/>
+      </Position>
+      <Position>
+        <Filename Value="frm_mainform.pas"/>
+        <Caret Line="29" Column="49" TopLine="22"/>
+      </Position>
+      <Position>
+        <Filename Value="frm_masterdetailform.pas"/>
+        <Caret Line="12" Column="59"/>
+      </Position>
+      <Position>
+        <Filename Value="frm_mainform.pas"/>
+        <Caret Line="52" Column="29" TopLine="33"/>
+      </Position>
+      <Position>
+        <Filename Value="frm_mainform.pas"/>
+        <Caret Line="19" Column="23" TopLine="13"/>
+      </Position>
+      <Position>
+        <Filename Value="frm_mainform.pas"/>
+        <Caret Line="56" Column="39" TopLine="34"/>
+      </Position>
+      <Position>
+        <Filename Value="frm_masterdetailform.pas"/>
+        <Caret Line="19" Column="35"/>
+      </Position>
+      <Position>
+        <Filename Value="frm_masterdetailform.pas"/>
+        <Caret Line="34" Column="32" TopLine="22"/>
+      </Position>
+      <Position>
+        <Filename Value="frm_masterdetailform.pas"/>
+        <Caret Line="37" Column="36" TopLine="23"/>
+      </Position>
+      <Position>
+        <Filename Value="frm_masterdetailform.pas"/>
+        <Caret Line="33" Column="31" TopLine="24"/>
+      </Position>
+      <Position>
+        <Filename Value="frm_masterdetailform.pas"/>
+        <Caret Line="53" Column="43" TopLine="42"/>
+      </Position>
+      <Position>
+        <Filename Value="frm_masterdetailform.pas"/>
+        <Caret Line="12" Column="13"/>
+      </Position>
+      <Position>
+        <Filename Value="frm_masterdetailform.pas"/>
+        <Caret Line="97" Column="17" TopLine="78"/>
+      </Position>
+    </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>
       <Modes ActiveMode=""/>

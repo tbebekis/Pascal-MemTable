@@ -1,9 +1,27 @@
 object MainForm: TMainForm
-  Left = 703
+  Left = 570
   Height = 240
-  Top = 227
+  Top = 206
   Width = 320
-  Caption = 'MainForm'
+  Caption = 'TMemTable Demo'
+  ClientHeight = 240
+  ClientWidth = 320
   Position = poWorkAreaCenter
   LCLVersion = '3.0.0.3'
+  object btnSimple: TButton
+    Left = 16
+    Height = 25
+    Top = 8
+    Width = 235
+    Caption = 'Simple'
+    TabOrder = 0
+  end
+  object btnMasterDetail: TButton
+    Left = 16
+    Height = 25
+    Top = 36
+    Width = 235
+    Caption = 'Master-Detail'
+    TabOrder = 1
+  end
 end

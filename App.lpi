@@ -5,6 +5,7 @@
     <PathDelim Value="\"/>
     <General>
       <SessionStorage Value="InProjectDir"/>
+      <AutoCreateForms Value="False"/>
       <Title Value="App"/>
       <Scaled Value="True"/>
       <ResourceType Value="res"/>
@@ -38,6 +39,7 @@
         <Filename Value="frm_mainform.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="MainForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_MainForm"/>
       </Unit>
@@ -45,6 +47,23 @@
         <Filename Value="o_memtable.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="o_MemTable"/>
+      </Unit>
+      <Unit>
+        <Filename Value="frm_simpleform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="SimpleForm"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit>
+      <Unit>
+        <Filename Value="o_app.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="o_App"/>
+      </Unit>
+      <Unit>
+        <Filename Value="frm_masterdetailform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="MasterDetailForm"/>
+        <ResourceBaseClass Value="Form"/>
       </Unit>
     </Units>
   </ProjectOptions>

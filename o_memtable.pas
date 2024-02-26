@@ -240,8 +240,8 @@ type
     procedure GetFieldNames(List: TStrings); virtual;
     function  IndexOfField(Field: TFieldInfo): Integer; virtual;
     function  IndexOfFieldName(const FieldName: string): Integer; virtual;
-    function  FindField(const FieldName: string): TFieldInfo; virtual;
-    function  FieldByName(const FieldName: string): TFieldInfo; virtual;
+    function  FindInfoField(const FieldName: string): TFieldInfo; virtual;
+    function  FieldInfoByName(const FieldName: string): TFieldInfo; virtual;
 
     procedure GetFieldInfoList(List: TList; const FieldNames: string); virtual; overload;
     function  GetFieldInfoList(const FieldNames: string): TList; virtual;overload;
@@ -1738,7 +1738,7 @@ begin
       Exit; //==>
     end;
 end;
-function TMemTable.FindField(const FieldName: string): TFieldInfo;
+function TMemTable.FindInfoField(const FieldName: string): TFieldInfo;
 var
   Index : Integer;
 begin
@@ -1749,9 +1749,9 @@ begin
     Result := TFieldInfo(FFields[Index]);
 end;
 
-function TMemTable.FieldByName(const FieldName: string): TFieldInfo;
+function TMemTable.FieldInfoByName(const FieldName: string): TFieldInfo;
 begin
-  Result := FindField(FieldName);
+  Result := FindInfoField(FieldName);
   if not Assigned(Result) then
     raise Exception.CreateFmt('Field not found: %s', [FieldName]);
 end;
@@ -1765,7 +1765,7 @@ begin
     Pos := 1;
     while Pos <= Length(FieldNames) do
     begin
-      Field := FieldByName(ExtractFieldName(FieldNames, Pos));
+      Field := FieldInfoByName(ExtractFieldName(FieldNames, Pos));
       List.Add(Field);
     end;
   end;

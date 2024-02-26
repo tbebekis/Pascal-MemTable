@@ -1,0 +1,41 @@
+object MasterDetailForm: TMasterDetailForm
+  Left = 584
+  Height = 355
+  Top = 289
+  Width = 509
+  Caption = 'Master Detail'
+  ClientHeight = 355
+  ClientWidth = 509
+  LCLVersion = '3.0.0.3'
+  object gridMaster: TDBGrid
+    Left = 0
+    Height = 171
+    Top = 0
+    Width = 509
+    Align = alTop
+    Color = clWindow
+    Columns = <>
+    TabOrder = 0
+  end
+  object Splitter1: TSplitter
+    Cursor = crVSplit
+    Left = 0
+    Height = 5
+    Top = 171
+    Width = 509
+    Align = alTop
+    Color = clGray
+    ParentColor = False
+    ResizeAnchor = akTop
+  end
+  object gridDetail: TDBGrid
+    Left = 0
+    Height = 179
+    Top = 176
+    Width = 509
+    Align = alClient
+    Color = clWindow
+    Columns = <>
+    TabOrder = 2
+  end
+end
