@@ -1,0 +1,9 @@
+object MainForm: TMainForm
+  Left = 703
+  Height = 240
+  Top = 227
+  Width = 320
+  Caption = 'MainForm'
+  Position = poWorkAreaCenter
+  LCLVersion = '3.0.0.3'
+end
