@@ -12,6 +12,8 @@ uses
   , Graphics
   , Dialogs
   , StdCtrls
+  , DB
+
 
   ,o_App
   ;
@@ -25,6 +27,7 @@ type
     btnSimple: TButton;
     btnMasterDetail: TButton;
     btnStatusFilter: TButton;
+    btnRange: TButton;
   private
     procedure AnyClick(Sender: TObject);
     procedure ShowModalForm(FormClass: TFormClass);
@@ -48,6 +51,7 @@ uses
   ,frm_MasterDetailForm
   ,frm_SortForm
   ,frm_StatusFilterForm
+  ,frm_RangeForm
   ;
 
 { TMainForm }
@@ -62,6 +66,8 @@ begin
        ShowModalForm(TSortForm)
    else if (btnStatusFilter = Sender) then
        ShowModalForm(TStatusFilterForm)
+   else if (btnRange = Sender) then
+       ShowModalForm(TRangeForm)
    ;
 end;
 
@@ -98,8 +104,8 @@ begin
   btnMasterDetail.OnClick := @AnyClick;
   btnSort.OnClick := @AnyClick;
   btnStatusFilter.OnClick := @AnyClick;
+  btnRange.OnClick := @AnyClick;
 
-  //ShowModalForm(TSimpleForm);
 end;
 
 end.

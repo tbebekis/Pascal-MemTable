@@ -27,6 +27,9 @@
     </RunParams>
     <RequiredPackages>
       <Item>
+        <PackageName Value="FCL"/>
+      </Item>
+      <Item>
         <PackageName Value="LCL"/>
       </Item>
     </RequiredPackages>
@@ -83,6 +86,13 @@
         <ComponentName Value="StatusFilterForm"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_StatusFilterForm"/>
+      </Unit>
+      <Unit>
+        <Filename Value="frm_rangeform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="RangeForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="frm_RangeForm"/>
       </Unit>
     </Units>
   </ProjectOptions>

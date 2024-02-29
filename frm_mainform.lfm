@@ -40,4 +40,12 @@ object MainForm: TMainForm
     Caption = 'Status Filter'
     TabOrder = 3
   end
+  object btnRange: TButton
+    Left = 16
+    Height = 25
+    Top = 120
+    Width = 235
+    Caption = 'Range'
+    TabOrder = 4
+  end
 end

@@ -575,7 +575,7 @@ begin
 
   FFields            := TList.Create();
   FBlobFields        := TList.Create();
-  FSortOnFields       := TList.Create();
+  FSortOnFields      := TList.Create();
   FDetailFields      := TList.Create();
   FRangeFields       := TList.Create();
   FModifiedFields    := TList.Create();

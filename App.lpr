@@ -11,7 +11,7 @@ uses
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, frm_MainForm, o_MemTable, frm_simpleform, o_App, frm_SortForm, 
-frm_StatusFilterForm
+frm_StatusFilterForm, frm_RangeForm
   { you can add units after this };
 
 {$R *.res}
