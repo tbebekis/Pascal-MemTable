@@ -955,7 +955,7 @@ begin
 
     RowStatus := GetUpdateStatus(RecBuf);    // usUnmodified, usModified, usInserted, usDeleted
 
-    if RowStatus in [usInserted, usDeleted] then
+    if RowStatus in [usInserted] then
     begin
       FAllRows.Remove(RecBuf);
       FreeRecordBuffer(RecBuf);
@@ -1157,18 +1157,44 @@ procedure TMemTable.DeleteRows;
 var
   i      : Integer;
   RecBuf : PChar;
+  FreeList : TList;
 begin
   Lock();
   try
     FRows.Clear;
 
-    for i := 0 to FAllRows.Count - 1 do
-    begin
-      RecBuf := FAllRows[i];
-      FreeRecordBuffer(RecBuf);
+    FreeList := TList.Create;
+    try
+
+      for i := 0 to FAllRows.Count - 1 do
+      begin
+        RecBuf := FAllRows[i];
+        RowStatus := GetUpdateStatus(RecBuf);    // usUnmodified, usModified, usInserted, usDeleted
+
+        if RowStatus in [usInserted] then
+        begin
+          FreeList.Add(RecBuf);
+        end else begin
+          PRecInfo(RecBuf + FBookOfs)^.Status := usDeleted;  // keep deleted rows in AllRows
+        end;
+      end;
+
+      for i := 0 to FreeList.Count - 1 do
+      begin
+        RecBuf  := FreeList[i];
+        FAllRows.Remove(RecBuf);
+        FreeRecordBuffer(RecBuf);
+      end;
+
+      FreeList.Clear();
+
+    finally
+      FreeList.Free;
     end;
 
-    FAllRows.Clear;
+
+
+    //FAllRows.Clear;
 
     CurRecIndex := -1;
   finally
