@@ -1,4 +1,4 @@
-unit frm_RangeForm;
+unit frm_LocateLookupForm;
 
 {$mode ObjFPC}{$H+}
 {$WARN 6058 off : Call to subroutine "$1" marked as inline is not inlined}
@@ -25,18 +25,16 @@ uses
 
 type
 
-  { TRangeForm }
+  { TLocateLookupForm }
 
-  TRangeForm = class(TForm)
-    btnApplyRange: TButton;
-    btnCancelRange: TButton;
-    edtFieldName: TEdit;
-    edtStartValue: TEdit;
-    edtEndValue: TEdit;
+  TLocateLookupForm = class(TForm)
+    btnLocate: TButton;
+    btnLookup: TButton;
+    edtKeyField: TEdit;
+    edtKeyValue: TEdit;
     Grid: TDBGrid;
     Label1: TLabel;
     Label2: TLabel;
-    Label3: TLabel;
     Panel1: TPanel;
   private
     DS: TDatasource;
@@ -55,7 +53,8 @@ implementation
 {$R *.lfm}
 
 
-procedure TRangeForm.InitializeTest();
+
+procedure TLocateLookupForm.InitializeTest();
 var
   i: Integer;
 begin
@@ -83,23 +82,30 @@ begin
     Table.Post();
   end;
 
-  btnApplyRange.OnClick := @AnyClick;
-  btnCancelRange.OnClick := @AnyClick;
+  btnLocate.OnClick := @AnyClick;
+  btnLookup.OnClick := @AnyClick;
 end;
 
-procedure TRangeForm.AnyClick(Sender: TObject);
+procedure TLocateLookupForm.AnyClick(Sender: TObject);
+var
+  Res : Variant;
 begin
-  if (btnApplyRange = Sender) then
+  if (btnLocate = Sender) then
   begin
-    Table.SetRange(edtFieldName.Text, StrToInt(edtStartValue.Text), StrToInt(edtEndValue.Text), false);
-  end else if (btnCancelRange = Sender) then
+    if not Table.Locate(edtKeyField.Text, StrToInt(edtKeyValue.Text), []) then
+       ShowMessage('Locate failed')
+    else
+       ShowMessage('OK');
+  end else if (btnLookup = Sender) then
   begin
-    Table.CancelRange();
+    // Lookup(const KeyFields: string; const KeyValues: Variant; const ResultFields: string): Variant;
+    Res := Table.Lookup(edtKeyField.Text, StrToInt(edtKeyValue.Text), 'Name');
+    ShowMessage(Res);
   end;
 
 end;
 
-procedure TRangeForm.KeyPress(var Key: char);
+procedure TLocateLookupForm.KeyPress(var Key: char);
 begin
   if Key = #27 then
   begin
@@ -110,7 +116,7 @@ begin
   inherited KeyPress(Key);
 end;
 
-procedure TRangeForm.DoShow;
+procedure TLocateLookupForm.DoShow;
 begin
   inherited DoShow;
   KeyPreview := True;

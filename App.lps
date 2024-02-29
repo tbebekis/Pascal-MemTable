@@ -10,7 +10,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="26" Y="6"/>
-        <UsageCount Value="30"/>
+        <UsageCount Value="31"/>
       </Unit>
       <Unit>
         <Filename Value="frm_mainform.pas"/>
@@ -19,9 +19,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_MainForm"/>
-        <TopLine Value="84"/>
-        <CursorPos Y="108"/>
-        <UsageCount Value="30"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="88"/>
+        <CursorPos X="42" Y="112"/>
+        <UsageCount Value="31"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -29,11 +30,10 @@
         <Filename Value="o_memtable.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="o_MemTable"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="328"/>
-        <CursorPos X="50" Y="338"/>
-        <UsageCount Value="30"/>
+        <TopLine Value="344"/>
+        <CursorPos X="110" Y="348"/>
+        <UsageCount Value="31"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -45,7 +45,7 @@
         <UnitName Value="frm_SsimpleForm"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="14" Y="3"/>
-        <UsageCount Value="30"/>
+        <UsageCount Value="31"/>
       </Unit>
       <Unit>
         <Filename Value="o_app.pas"/>
@@ -53,7 +53,7 @@
         <UnitName Value="o_App"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="38" Y="24"/>
-        <UsageCount Value="29"/>
+        <UsageCount Value="30"/>
       </Unit>
       <Unit>
         <Filename Value="frm_masterdetailform.pas"/>
@@ -64,7 +64,7 @@
         <UnitName Value="frm_MasterDetailForm"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="23" Y="7"/>
-        <UsageCount Value="29"/>
+        <UsageCount Value="30"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\lcl\forms.pp"/>
@@ -123,8 +123,8 @@
         <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\db.pas"/>
         <UnitName Value="DB"/>
         <EditorIndex Value="4"/>
-        <TopLine Value="1370"/>
-        <CursorPos X="52" Y="1384"/>
+        <TopLine Value="1367"/>
+        <CursorPos X="28" Y="1380"/>
         <UsageCount Value="14"/>
         <Loaded Value="True"/>
       </Unit>
@@ -134,11 +134,10 @@
         <ComponentName Value="StatusFilterForm"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_StatusFilterForm"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="114"/>
         <CursorPos X="8" Y="139"/>
         <UsageCount Value="23"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\objpas\typinfo.pp"/>
@@ -163,34 +162,26 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_RangeForm"/>
         <EditorIndex Value="3"/>
-        <TopLine Value="81"/>
-        <CursorPos X="49" Y="93"/>
+        <TopLine Value="2"/>
+        <CursorPos Y="4"/>
         <UsageCount Value="21"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
+      <Unit>
+        <Filename Value="frm_locatelookupform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="LocateLookupForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="frm_LocateLookupForm"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="16"/>
+        <CursorPos X="25" Y="11"/>
+        <UsageCount Value="21"/>
+        <Loaded Value="True"/>
+      </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="108" Column="28" TopLine="84"/>
-      </Position>
-      <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="117" Column="30" TopLine="93"/>
-      </Position>
-      <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="118" Column="30" TopLine="94"/>
-      </Position>
-      <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="162" Column="11" TopLine="138"/>
-      </Position>
-      <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="192" Column="15" TopLine="185"/>
-      </Position>
       <Position>
         <Filename Value="o_memtable.pas"/>
         <Caret Line="193" Column="11" TopLine="185"/>
@@ -290,6 +281,26 @@
       <Position>
         <Filename Value="frm_mainform.pas"/>
         <Caret Line="108" TopLine="84"/>
+      </Position>
+      <Position>
+        <Filename Value="frm_mainform.pas"/>
+        <Caret Line="55" Column="3" TopLine="64"/>
+      </Position>
+      <Position>
+        <Filename Value="frm_locatelookupform.pas"/>
+        <Caret Line="4" Column="26"/>
+      </Position>
+      <Position>
+        <Filename Value="o_memtable.pas"/>
+        <Caret Line="351" Column="32" TopLine="344"/>
+      </Position>
+      <Position>
+        <Filename Value="frm_locatelookupform.pas"/>
+        <Caret Line="88" Column="20" TopLine="64"/>
+      </Position>
+      <Position>
+        <Filename Value="frm_locatelookupform.pas"/>
+        <Caret Line="25" Column="26" TopLine="41"/>
       </Position>
     </JumpHistory>
     <RunParams>

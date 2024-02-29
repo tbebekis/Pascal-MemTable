@@ -48,4 +48,12 @@ object MainForm: TMainForm
     Caption = 'Range'
     TabOrder = 4
   end
+  object btnLocateLookup: TButton
+    Left = 16
+    Height = 25
+    Top = 148
+    Width = 235
+    Caption = 'Locate/Lookup'
+    TabOrder = 5
+  end
 end
