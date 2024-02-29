@@ -17,7 +17,7 @@ uses
   //,Generics.Collections
   //,FGL
   //,Contnrs
-  ,TypInfo
+  //,TypInfo
 
   ,DB
   //,DBConst
@@ -357,7 +357,6 @@ type
     procedure CancelRange;
 
     procedure CancelUpdates();
-
 
     procedure Sort(FieldName: string; SortMode: TMemTableSortMode = smAsc);  overload;
     procedure NextSort(FieldName: string);
@@ -948,16 +947,23 @@ end;
 procedure TMemTable.InternalDelete;
 var
   RecBuf    : TRecordBuffer;
+  RowStatus : TUpdateStatus;
 begin
   Lock();
   try
     RecBuf := FRows[CurRecIndex];
 
-    FAllRows.Remove(RecBuf);
+    RowStatus := GetUpdateStatus(RecBuf);    // usUnmodified, usModified, usInserted, usDeleted
+
+    if RowStatus in [usInserted, usDeleted] then
+    begin
+      FAllRows.Remove(RecBuf);
+      FreeRecordBuffer(RecBuf);
+    end else begin
+      PRecInfo(RecBuf + FBookOfs)^.Status := usDeleted;  // keep deleted rows in AllRows
+    end;
+
     FRows.Delete(CurRecIndex);
-
-    FreeRecordBuffer(RecBuf);
-
     CurRecIndex := Min(FRows.Count - 1, CurRecIndex);
 
   finally

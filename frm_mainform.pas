@@ -24,6 +24,7 @@ type
     btnSort: TButton;
     btnSimple: TButton;
     btnMasterDetail: TButton;
+    btnStatusFilter: TButton;
   private
     procedure AnyClick(Sender: TObject);
     procedure ShowModalForm(FormClass: TFormClass);
@@ -43,9 +44,10 @@ implementation
 {$R *.lfm}
 
 uses
-   frm_simpleform
-  ,frm_masterdetailform
+   frm_SimpleForm
+  ,frm_MasterDetailForm
   ,frm_SortForm
+  ,frm_StatusFilterForm
   ;
 
 { TMainForm }
@@ -57,7 +59,9 @@ begin
    else if (btnMasterDetail = Sender) then
        ShowModalForm(TMasterDetailForm)
    else if (btnSort = Sender) then
-       ShowModalForm(TSortForm);
+       ShowModalForm(TSortForm)
+   else if (btnStatusFilter = Sender) then
+       ShowModalForm(TStatusFilterForm)
    ;
 end;
 
@@ -93,6 +97,7 @@ begin
   btnSimple.OnClick := @AnyClick;
   btnMasterDetail.OnClick := @AnyClick;
   btnSort.OnClick := @AnyClick;
+  btnStatusFilter.OnClick := @AnyClick;
 
   //ShowModalForm(TSimpleForm);
 end;

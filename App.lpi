@@ -54,6 +54,7 @@
         <ComponentName Value="SimpleForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="frm_SsimpleForm"/>
       </Unit>
       <Unit>
         <Filename Value="o_app.pas"/>
@@ -66,13 +67,22 @@
         <ComponentName Value="MasterDetailForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <UnitName Value="frm_MasterDetailForm"/>
       </Unit>
       <Unit>
         <Filename Value="frm_sortform.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="SortForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_SortForm"/>
+      </Unit>
+      <Unit>
+        <Filename Value="frm_statusfilterform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="StatusFilterForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="frm_StatusFilterForm"/>
       </Unit>
     </Units>
   </ProjectOptions>

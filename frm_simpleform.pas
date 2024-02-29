@@ -1,4 +1,4 @@
-unit frm_simpleform;
+unit frm_SimpleForm;
 
 {$mode ObjFPC}{$H+}
 

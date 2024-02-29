@@ -1,4 +1,4 @@
-unit frm_masterdetailform;
+unit frm_MasterDetailForm;
 
 {$mode ObjFPC}{$H+}
 
