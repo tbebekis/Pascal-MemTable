@@ -106,7 +106,7 @@ type
    TCursorMode = ( cmStatus
                    ,cmLink
                    ,cmRange
-                   ,cmIndex
+                   ,cmSort
                    ,cmFilter
                   );
 
@@ -145,7 +145,8 @@ type
   private
     procedure SetCurRecIndex(Value: Integer);
   private
-    FIndexFieldNames: string;
+    FSortMode: TMemTableSortMode;
+    FSortOnFieldNames: string;
     FTableName                 : string;
     FLock                      : SyncObjs.TCriticalSection;
     FLockCount                 : Integer;
@@ -155,7 +156,7 @@ type
 
     FFields                    : TList;   { all TFieldInfo fields - owned }
     FBlobFields                : TList;   { TFieldInfo list }
-    FIndexFields               : TList;   { TFieldInfo list }
+    FSortOnFields              : TList;   { TFieldInfo list }
 
     FDetailFields              : TList;   { TFieldInfo list }
     FRangeFields               : TList;   { TFieldInfo list }
@@ -196,81 +197,82 @@ type
     function  GetMasterFieldNames: string;
     function  GetStatusFilter: TUpdateStatusSet;
     procedure SetDetailFieldNames(Value: string);
-    procedure SetIndexFieldNames(Value: string);
+    procedure SetSortMode(Value: TMemTableSortMode);
+    procedure SetSortOnFieldNames(Value: string);
     procedure SetMasterDataSource(Value: TDataSource);
     procedure SetMasterFieldNames(Value: string);
     procedure SetStatusFilter(Value: TUpdateStatusSet);
 
     property CurRecIndex: Integer read FCurRecIndex write SetCurRecIndex;
 
-    procedure Lock; virtual;
-    procedure UnLock; virtual;
+    procedure Lock;
+    procedure UnLock;
 
     { initialization }
-    procedure Initialize; virtual;
-    procedure Finalize; virtual;
-    procedure DeleteRows; virtual;
+    procedure Initialize;
+    procedure Finalize;
+    procedure DeleteRows;
 
     { get/set field data }
-    function  GetFieldDataInternal(RecBuf: TRecordBuffer; Buffer: PChar; FieldIndex: Integer): Boolean; virtual;
-    procedure SetFieldDataInternal(RecBuf: TRecordBuffer; Buffer: PChar; FieldIndex: Integer); virtual;
+    function  GetFieldDataInternal(RecBuf: TRecordBuffer; Buffer: PChar; FieldIndex: Integer): Boolean;
+    procedure SetFieldDataInternal(RecBuf: TRecordBuffer; Buffer: PChar; FieldIndex: Integer);
 
     { blobs }
-    procedure InitializeBlobs(RecBuf: TRecordBuffer); virtual;
-    procedure FinalizeBlobs(RecBuf: TRecordBuffer); virtual;
+    procedure InitializeBlobs(RecBuf: TRecordBuffer);
+    procedure FinalizeBlobs(RecBuf: TRecordBuffer);
 
-    procedure FreeBlobs(RecBuf: TRecordBuffer); virtual;
-    procedure FreeBlob(RecBuf: TRecordBuffer; FieldIndex: Integer); virtual;
-    procedure CopyBlobs(SourceRecBuf, DestRecBuf: TRecordBuffer); virtual;
-    procedure CopyBlob(SourceRecBuf, DestRecBuf: TRecordBuffer; FieldIndex: Integer); virtual;
+    procedure FreeBlobs(RecBuf: TRecordBuffer);
+    procedure FreeBlob(RecBuf: TRecordBuffer; FieldIndex: Integer);
+    procedure CopyBlobs(SourceRecBuf, DestRecBuf: TRecordBuffer);
+    procedure CopyBlob(SourceRecBuf, DestRecBuf: TRecordBuffer; FieldIndex: Integer);
 
     { record }
-    procedure CopyRecord(SourceRecBuf, DestRecBuf: TRecordBuffer); virtual;
-    function  CanDisplayRecord(RecBuf: TRecordBuffer): Boolean; virtual;
+    procedure CopyRecord(SourceRecBuf, DestRecBuf: TRecordBuffer);
+    function  CanDisplayRecord(RecBuf: TRecordBuffer): Boolean;
     function  GetActiveRecBuf(var RecBuf: TRecordBuffer): Boolean;
 
     { bookmark }
-    function  GoToBookmarkInternal(BM: Integer): Boolean; virtual;
-    function  IndexOfBookmark(BM: Integer): Integer; virtual;
-    function  GetBookmarkInternal(RecBuf: TRecordBuffer): Integer; virtual;
+    function  GoToBookmarkInternal(BM: Integer): Boolean;
+    function  IndexOfBookmark(BM: Integer): Integer;
+    function  GetBookmarkInternal(RecBuf: TRecordBuffer): Integer;
 
     { TFieldInfo related }
-    procedure AddFields();  virtual;
+    procedure AddFields();
 
-    procedure GetFieldNames(List: TStrings); virtual;
-    function  IndexOfField(Field: TFieldInfo): Integer; virtual;
-    function  IndexOfFieldName(const FieldName: string): Integer; virtual;
-    function  FindInfoField(const FieldName: string): TFieldInfo; virtual;
-    function  FieldInfoByName(const FieldName: string): TFieldInfo; virtual;
+    procedure GetFieldNames(List: TStrings);
+    function  IndexOfField(Field: TFieldInfo): Integer;
+    function  IndexOfFieldName(const FieldName: string): Integer;
+    function  FindInfoField(const FieldName: string): TFieldInfo;
+    function  GetFieldInfoByName(const FieldName: string): TFieldInfo;
 
-    procedure GetFieldInfoList(List: TList; const FieldNames: string); virtual; overload;
-    function  GetFieldInfoList(const FieldNames: string): TList; virtual;overload;
+    procedure GetFieldInfoList(List: TList; const FieldNames: string); overload;
+    function  GetFieldInfoList(const FieldNames: string): TList; overload;
 
-    function  GetFieldDataSize(FieldInfo: TFieldInfo): Integer; virtual;
-    function  GetFieldSize(FieldInfo: TFieldInfo): Integer; virtual;
+    function  GetFieldDataSize(FieldInfo: TFieldInfo): Integer;
+    function  GetFieldSize(FieldInfo: TFieldInfo): Integer;
 
     { blobs }
-    function  GetBlobSize(RecBuf: PChar; FieldIndex: Integer): LongWord;  virtual;
-    function  GetBlobData(RecBuf, Buffer: PChar; FieldIndex: Integer): LongWord; virtual;
-    procedure SetBlobData(RecBuf, Buffer: PChar; FieldIndex: Integer; BlobSize: LongWord); virtual;
+    function  GetBlobSize(RecBuf: PChar; FieldIndex: Integer): LongWord;
+    function  GetBlobData(RecBuf, Buffer: PChar; FieldIndex: Integer): LongWord;
+    procedure SetBlobData(RecBuf, Buffer: PChar; FieldIndex: Integer; BlobSize: LongWord);
 
     { comparing-sorting }
-    function  CompareFields(Data1, Data2: Pointer; FieldType: TFieldType; Options: TLocateOptions): Integer; virtual;
-    function  CompareRecords(const Buf1, Buf2: PChar; const IndexFieldList: TList; Options: TLocateOptions; SortMode: TMemTableSortMode; BreakMode: TBreakMode): Integer; virtual;
-    procedure QuickSort(L, R: Integer; const RowList: TList; const IndexFieldList: TList; Options: TLocateOptions; SortMode: TMemTableSortMode); virtual;
+    function  CompareFields(Data1, Data2: Pointer; FieldType: TFieldType; Options: TLocateOptions): Integer;
+    function  CompareRecords(const Buf1, Buf2: PChar; const IndexFieldList: TList; Options: TLocateOptions; SortMode: TMemTableSortMode; BreakMode: TBreakMode): Integer;
+    procedure QuickSort(L, R: Integer; const RowList: TList; const IndexFieldList: TList; Options: TLocateOptions; SortMode: TMemTableSortMode);
 
     { records - miscs }
-    function  GetUpdateStatus(RecBuf: TRecordBuffer): TUpdateStatus; virtual;
-    function  GetRecordByIndex(RecBuf: TRecordBuffer; RecordIndex: Integer): Boolean; virtual;
-    function  LocateRecord(const IndexFieldNames: string; const KeyValues: Variant; Options: TLocateOptions; SyncCursor: Boolean; var RecIndex: Integer): Boolean; overload; virtual;
-    function  LocateRecord(const KeyFields: string; const KeyValues: Variant; Options: TLocateOptions; SyncCursor: Boolean): Boolean;  overload; virtual;
+    function  GetUpdateStatus(RecBuf: TRecordBuffer): TUpdateStatus;
+    function  GetRecordByIndex(RecBuf: TRecordBuffer; RecordIndex: Integer): Boolean;
+    function  LocateRecord(const IndexFieldNames: string; const KeyValues: Variant; Options: TLocateOptions; SyncCursor: Boolean; var RecIndex: Integer): Boolean; overload;
+    function  LocateRecord(const KeyFields: string; const KeyValues: Variant; Options: TLocateOptions; SyncCursor: Boolean): Boolean;  overload;
 
     { field get/set value }
-    function  IsFieldNull(const FieldIndex: Integer; RecBuf: TRecordBuffer): Boolean; virtual;
-    function  GetFieldValue(const FieldIndex: Integer; RecBuf: TRecordBuffer): Variant; virtual;
-    procedure SetFieldValue(const FieldIndex: Integer; RecBuf: TRecordBuffer; const Value: Variant); virtual;
-    function  GetValue(const FieldIndex: Integer; FieldData: Pointer): Variant; virtual;
-    procedure SetValue(const FieldIndex: Integer; FieldData: Pointer; Value: Variant); virtual;
+    function  IsFieldNull(const FieldIndex: Integer; RecBuf: TRecordBuffer): Boolean;
+    function  GetFieldValue(const FieldIndex: Integer; RecBuf: TRecordBuffer): Variant;
+    procedure SetFieldValue(const FieldIndex: Integer; RecBuf: TRecordBuffer; const Value: Variant);
+    function  GetValue(const FieldIndex: Integer; FieldData: Pointer): Variant;
+    procedure SetValue(const FieldIndex: Integer; FieldData: Pointer; Value: Variant);
 
     { master-detail }
     procedure OnMasterLinkChanged(Sender: TObject);
@@ -279,11 +281,12 @@ type
 
     { operations }
     procedure SetLink(Value: Boolean);
+    procedure Sort(); overload;
 
     { miscs }
     procedure LoadIndexFieldList();
     function  IsFieldBufferNull(Buf: PChar): Boolean;
-    procedure VariantValuesToRecordBuffer(FieldList: TList; RecBuf: PChar; Values: Variant); virtual;
+    procedure VariantValuesToRecordBuffer(FieldList: TList; RecBuf: PChar; Values: Variant);
   protected
     {== TDataset overrides ==}
 
@@ -355,20 +358,22 @@ type
 
     procedure CancelUpdates();
 
-    procedure Sort; virtual;
-    procedure Rebuild; virtual;
+
+    procedure Sort(FieldName: string; SortMode: TMemTableSortMode = smAsc);  overload;
+    procedure NextSort(FieldName: string);
+    procedure Rebuild;
 
     { supported field types }
-    class function IsSupportedFieldType(FieldType: TFieldType): Boolean; virtual;
+    class function IsSupportedFieldType(FieldType: TFieldType): Boolean;
 
-    class function IsStringFieldType(FieldType: TFieldType): Boolean; virtual;
-    class function IsWideStringFieldType(FieldType: TFieldType): Boolean; virtual;
-    class function IsIntegerFieldType(FieldType: TFieldType): Boolean; virtual;
-    class function IsFloatFieldType(FieldType: TFieldType): Boolean; virtual;
-    class function IsBCDFieldType(FieldType: TFieldType): Boolean; virtual;
-    class function IsDateTimeFieldType(FieldType: TFieldType): Boolean; virtual;
-    class function IsVariantFieldType(FieldType: TFieldType): Boolean; virtual;
-    class function IsBlobFieldType(FieldType: TFieldType): Boolean; virtual;
+    class function IsStringFieldType(FieldType: TFieldType): Boolean;
+    class function IsWideStringFieldType(FieldType: TFieldType): Boolean;
+    class function IsIntegerFieldType(FieldType: TFieldType): Boolean;
+    class function IsFloatFieldType(FieldType: TFieldType): Boolean;
+    class function IsBCDFieldType(FieldType: TFieldType): Boolean;
+    class function IsDateTimeFieldType(FieldType: TFieldType): Boolean;
+    class function IsVariantFieldType(FieldType: TFieldType): Boolean;
+    class function IsBlobFieldType(FieldType: TFieldType): Boolean;
 
     { helpers }
     class function  DateTimeToNative(DataType: TFieldType; Data: TDateTime): TDateTimeRec;
@@ -385,7 +390,8 @@ type
     property MasterSource      : TDataSource read GetMasterDataSource write SetMasterDataSource;
     property MasterFieldNames  : string read GetMasterFieldNames write SetMasterFieldNames;
     property DetailFieldNames  : string read FDetailFieldNames  write SetDetailFieldNames;
-    property IndexFieldNames   : string read FIndexFieldNames write SetIndexFieldNames;
+    property SortOnFieldNames  : string read FSortOnFieldNames write SetSortOnFieldNames;
+    property SortMode          : TMemTableSortMode read FSortMode write SetSortMode;
     property StatusFilter      : TUpdateStatusSet read GetStatusFilter write SetStatusFilter;
 
     property IsInRange         : Boolean read FIsInRange;
@@ -443,6 +449,8 @@ function TFieldInfo.GetIsAutoInc: Boolean;
 begin
   Result := Field.DataType = ftAutoInc;
 end;
+
+
 
 
 
@@ -525,7 +533,7 @@ begin
     Position := 0;
     FDataset.SetBlobData(FRecBuf, Memory, FFieldIndex, Self.Size);
     FField.Modified := True;
-    FDataset.DataEvent(deFieldChange, Longint(FField));
+    FDataset.DataEvent(deFieldChange, PtrInt(FField));
   except
     if Assigned(Classes.ApplicationHandleException) then
       Classes.ApplicationHandleException(Self);
@@ -568,7 +576,7 @@ begin
 
   FFields            := TList.Create();
   FBlobFields        := TList.Create();
-  FIndexFields       := TList.Create();
+  FSortOnFields       := TList.Create();
   FDetailFields      := TList.Create();
   FRangeFields       := TList.Create();
   FModifiedFields    := TList.Create();
@@ -590,7 +598,7 @@ begin
   FreeAndNil(FModifiedFields);
   FreeAndNil(FRangeFields);
   FreeAndNil(FDetailFields);
-  FreeAndNil(FIndexFields);
+  FreeAndNil(FSortOnFields);
   FreeAndNil(FBlobFields);
   FreeAndNil(FFields);
 
@@ -875,7 +883,7 @@ begin
         FRows.Insert(RecIndex, DestRecBuf);
       end;
 
-      if cmIndex in FModes then
+      if cmSort in FModes then
         Sort();
     end;
 
@@ -1361,7 +1369,7 @@ begin
   end;
 
   if not (State in [dsCalcFields, dsInternalCalc, dsFilter, dsNewValue]) then
-    DataEvent(deFieldChange, Longint(Field));
+    DataEvent(deFieldChange, PtrInt(Field));
 
 
 end;
@@ -1749,7 +1757,7 @@ begin
     Result := TFieldInfo(FFields[Index]);
 end;
 
-function TMemTable.FieldInfoByName(const FieldName: string): TFieldInfo;
+function TMemTable.GetFieldInfoByName(const FieldName: string): TFieldInfo;
 begin
   Result := FindInfoField(FieldName);
   if not Assigned(Result) then
@@ -1765,7 +1773,7 @@ begin
     Pos := 1;
     while Pos <= Length(FieldNames) do
     begin
-      Field := FieldInfoByName(ExtractFieldName(FieldNames, Pos));
+      Field := GetFieldInfoByName(ExtractFieldName(FieldNames, Pos));
       List.Add(Field);
     end;
   end;
@@ -2033,23 +2041,51 @@ begin
     UnLock();
   end;
 end;
-procedure TMemTable.Sort;
+procedure TMemTable.Sort();
 var
   CurBuf : PChar;
 begin
-  if FInitialized and (cmIndex in FModes) and (FRows.Count > 0) and (FIndexFields.Count > 0) then
-  begin
-    if (CurRecIndex < 0) or (CurRecIndex >= FRows.Count) then
-      CurBuf := nil
-    else
-      CurBuf := FRows[CurRecIndex];
+  Lock();
+  try
+    if Active and FInitialized and (cmSort in FModes) and (FRows.Count > 0) and (FSortOnFields.Count > 0) then
+    begin
+      if (CurRecIndex < 0) or (CurRecIndex >= FRows.Count) then
+        CurBuf := nil
+      else
+        CurBuf := FRows[CurRecIndex];
 
-    QuickSort(0, FRows.Count - 1, FRows, FIndexFields, [], smAsc);
+      QuickSort(0, FRows.Count - 1, FRows, FSortOnFields, [], SortMode);
 
-    CurRecIndex := FRows.IndexOf(CurBuf);
+      CurRecIndex := FRows.IndexOf(CurBuf);
+
+      UpdateCursorPos();
+      Resync([]);
+    end;
+  finally
+    UnLock();
   end;
-
 end;
+
+procedure TMemTable.Sort(FieldName: string; SortMode: TMemTableSortMode);
+begin
+  FSortMode := SortMode;
+  SortOnFieldNames := FieldName;
+end;
+
+procedure TMemTable.NextSort(FieldName: string);
+  function GetNextSortMode() : TMemTableSortMode;
+  begin
+    if (FSortMode = smNone) then
+      Result := smAsc
+    else if (FSortMode = smAsc) then
+      Result := smDesc
+    else
+      Result := smNone;
+  end;
+begin
+  Sort(FieldName, GetNextSortMode());
+end;
+
 procedure TMemTable.Rebuild;
 var
   i      : Integer;
@@ -2641,16 +2677,47 @@ begin
   end;
 end;
 
-procedure TMemTable.SetIndexFieldNames(Value: string);
+procedure TMemTable.SetSortMode(Value: TMemTableSortMode);
 begin
-  if FIndexFieldNames <> Value then
-  begin
-    FIndexFieldNames := Value;
+  FSortMode := Value;
 
-    LoadIndexFieldList();
+  if FSortMode <> smNone then
+     FModes := FModes + [cmSort]
+  else
+     FModes := FModes - [cmSort];
+
+  Sort();
+
+end;
+procedure TMemTable.SetSortOnFieldNames(Value: string);
+begin
+  FSortOnFieldNames := Value;
+
+  LoadIndexFieldList();
+
+  if (FSortOnFields.Count > 0) then
+  begin
+    FModes := FModes + [cmSort];
+  end else begin
+    FModes := FModes - [cmSort];
+  end;
+
+  Sort();
+end;
+procedure TMemTable.LoadIndexFieldList();
+begin
+  if Active or (FieldCount > 0) then
+  begin
+
+    Lock();
+    try
+      FSortOnFields.Clear;
+      GetFieldInfoList(FSortOnFields, FSortOnFieldNames);
+    finally
+      UnLock();
+    end;
   end;
 end;
-
 function TMemTable.GetStatusFilter: TUpdateStatusSet;
 begin
   Result := FStatusOptions
@@ -2736,34 +2803,7 @@ begin
     GetFieldInfoList(FDetailFields, FDetailFieldNames);
   end;
 end;
-procedure TMemTable.LoadIndexFieldList();
-begin
-  if Active or (FieldCount > 0) then
-  begin
 
-    Lock();
-    try
-      FIndexFields.Clear;
-      GetFieldInfoList(FIndexFields, FIndexFieldNames);
-
-      if (FIndexFields.Count > 0) then
-      begin
-        FModes := FModes + [cmIndex];
-        Sort();
-      end else begin
-        FModes := FModes - [cmIndex];
-      end;
-    finally
-      UnLock();
-    end;
-
-    if Active then
-    begin
-      UpdateCursorPos();
-      Resync([]);
-    end;
-  end;
-end;
 
 procedure TMemTable.SetLink(Value: Boolean);
 var

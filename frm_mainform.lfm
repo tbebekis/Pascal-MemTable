@@ -24,4 +24,12 @@ object MainForm: TMainForm
     Caption = 'Master-Detail'
     TabOrder = 1
   end
+  object btnSort: TButton
+    Left = 16
+    Height = 25
+    Top = 64
+    Width = 235
+    Caption = 'Sort'
+    TabOrder = 2
+  end
 end

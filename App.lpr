@@ -10,7 +10,7 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, frm_MainForm, o_MemTable, frm_simpleform, o_App
+  Forms, frm_MainForm, o_MemTable, frm_simpleform, o_App, frm_SortForm
   { you can add units after this };
 
 {$R *.res}

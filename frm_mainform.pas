@@ -21,6 +21,7 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    btnSort: TButton;
     btnSimple: TButton;
     btnMasterDetail: TButton;
   private
@@ -42,8 +43,9 @@ implementation
 {$R *.lfm}
 
 uses
-  frm_simpleform
+   frm_simpleform
   ,frm_masterdetailform
+  ,frm_SortForm
   ;
 
 { TMainForm }
@@ -54,6 +56,8 @@ begin
        ShowModalForm(TSimpleForm)
    else if (btnMasterDetail = Sender) then
        ShowModalForm(TMasterDetailForm)
+   else if (btnSort = Sender) then
+       ShowModalForm(TSortForm);
    ;
 end;
 
@@ -88,8 +92,9 @@ begin
 
   btnSimple.OnClick := @AnyClick;
   btnMasterDetail.OnClick := @AnyClick;
+  btnSort.OnClick := @AnyClick;
 
-  ShowModalForm(TSimpleForm);
+  //ShowModalForm(TSimpleForm);
 end;
 
 end.
