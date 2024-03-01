@@ -10,7 +10,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="26" Y="6"/>
-        <UsageCount Value="31"/>
+        <UsageCount Value="42"/>
       </Unit>
       <Unit>
         <Filename Value="frm_mainform.pas"/>
@@ -19,10 +19,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_MainForm"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="88"/>
-        <CursorPos X="42" Y="112"/>
-        <UsageCount Value="31"/>
+        <TopLine Value="13"/>
+        <CursorPos X="22" Y="18"/>
+        <UsageCount Value="42"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -30,10 +29,10 @@
         <Filename Value="o_memtable.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="o_MemTable"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="344"/>
-        <CursorPos X="110" Y="348"/>
-        <UsageCount Value="31"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="972"/>
+        <CursorPos X="3" Y="976"/>
+        <UsageCount Value="42"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -45,7 +44,7 @@
         <UnitName Value="frm_SsimpleForm"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="14" Y="3"/>
-        <UsageCount Value="31"/>
+        <UsageCount Value="42"/>
       </Unit>
       <Unit>
         <Filename Value="o_app.pas"/>
@@ -53,7 +52,7 @@
         <UnitName Value="o_App"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="38" Y="24"/>
-        <UsageCount Value="30"/>
+        <UsageCount Value="41"/>
       </Unit>
       <Unit>
         <Filename Value="frm_masterdetailform.pas"/>
@@ -63,8 +62,54 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_MasterDetailForm"/>
         <EditorIndex Value="-1"/>
-        <CursorPos X="23" Y="7"/>
-        <UsageCount Value="30"/>
+        <CursorPos X="54" Y="10"/>
+        <UsageCount Value="41"/>
+      </Unit>
+      <Unit>
+        <Filename Value="frm_sortform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="SortForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="frm_SortForm"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="69"/>
+        <CursorPos X="7" Y="101"/>
+        <UsageCount Value="40"/>
+      </Unit>
+      <Unit>
+        <Filename Value="frm_statusfilterform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="StatusFilterForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="frm_StatusFilterForm"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="107"/>
+        <CursorPos X="8" Y="139"/>
+        <UsageCount Value="34"/>
+      </Unit>
+      <Unit>
+        <Filename Value="frm_rangeform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="RangeForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="frm_RangeForm"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="88"/>
+        <CursorPos X="8" Y="120"/>
+        <UsageCount Value="32"/>
+      </Unit>
+      <Unit>
+        <Filename Value="frm_locatelookupform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="LocateLookupForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="frm_LocateLookupForm"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="42" Y="6"/>
+        <UsageCount Value="32"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\lcl\forms.pp"/>
@@ -72,21 +117,21 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="931"/>
         <CursorPos X="40" Y="939"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\lcl\include\application.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="2216"/>
         <CursorPos X="53" Y="2234"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="G:\My Drive\Dev\Lazarus\MemTable2\o_memtable.pas"/>
         <UnitName Value="o_MemTable"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="15"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="8"/>
       </Unit>
       <Unit>
         <Filename Value="G:\My Drive\Dev\Lazarus\MemTable2\frm_main.pas"/>
@@ -97,19 +142,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="59"/>
         <CursorPos X="52" Y="65"/>
-        <UsageCount Value="15"/>
-      </Unit>
-      <Unit>
-        <Filename Value="frm_sortform.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="SortForm"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="frm_SortForm"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="76"/>
-        <CursorPos X="7" Y="101"/>
-        <UsageCount Value="28"/>
+        <UsageCount Value="13"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\lcl\dbgrids.pas"/>
@@ -117,27 +150,16 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="273"/>
         <CursorPos X="23" Y="274"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="8"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\db.pas"/>
         <UnitName Value="DB"/>
-        <EditorIndex Value="4"/>
-        <TopLine Value="1367"/>
-        <CursorPos X="28" Y="1380"/>
-        <UsageCount Value="14"/>
+        <EditorIndex Value="8"/>
+        <TopLine Value="1674"/>
+        <CursorPos X="15" Y="1687"/>
+        <UsageCount Value="19"/>
         <Loaded Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="frm_statusfilterform.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="StatusFilterForm"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="frm_StatusFilterForm"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="114"/>
-        <CursorPos X="8" Y="139"/>
-        <UsageCount Value="23"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\objpas\typinfo.pp"/>
@@ -145,162 +167,245 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="865"/>
         <CursorPos X="10" Y="879"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\bufdataset.pas"/>
         <UnitName Value="BufDataset"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="376"/>
-        <CursorPos X="33" Y="434"/>
-        <UsageCount Value="10"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="2034"/>
+        <CursorPos X="57" Y="2046"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="frm_rangeform.pas"/>
+        <Filename Value="frm_blobform.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="RangeForm"/>
+        <ComponentName Value="BlobForm"/>
         <ResourceBaseClass Value="Form"/>
-        <UnitName Value="frm_RangeForm"/>
-        <EditorIndex Value="3"/>
-        <TopLine Value="2"/>
-        <CursorPos Y="4"/>
-        <UsageCount Value="21"/>
+        <UnitName Value="frm_BlobForm"/>
+        <EditorIndex Value="7"/>
+        <CursorPos Y="13"/>
+        <UsageCount Value="27"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="frm_locatelookupform.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="LocateLookupForm"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="frm_LocateLookupForm"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\win\sysutils.pp"/>
+        <UnitName Value="SysUtils"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\lcl\dbctrls.pp"/>
+        <UnitName Value="DBCtrls"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1184"/>
+        <CursorPos X="25" Y="1196"/>
+        <UsageCount Value="11"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\lcl\extctrls.pp"/>
+        <UnitName Value="ExtCtrls"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="550"/>
+        <CursorPos X="14" Y="563"/>
+        <UsageCount Value="11"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\lcl\include\customimage.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="294"/>
+        <CursorPos X="3" Y="15"/>
+        <UsageCount Value="11"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\lcl\include\dbimage.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="212"/>
+        <CursorPos X="3" Y="166"/>
+        <UsageCount Value="11"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\lcl\controls.pp"/>
+        <UnitName Value="Controls"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="2417"/>
+        <CursorPos X="3" Y="2435"/>
+        <UsageCount Value="11"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\lcl\graphics.pp"/>
+        <UnitName Value="Graphics"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="924"/>
+        <CursorPos X="3" Y="883"/>
+        <UsageCount Value="11"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\lcl\dialogs.pp"/>
+        <UnitName Value="Dialogs"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="167"/>
+        <CursorPos X="20" Y="175"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\dataset.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1723"/>
+        <CursorPos X="3" Y="1726"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\bufdataset_parser.pp"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="16"/>
-        <CursorPos X="25" Y="11"/>
-        <UsageCount Value="21"/>
+        <TopLine Value="474"/>
+        <CursorPos X="33" Y="363"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\dbase\dbf_prsdef.pas"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="37"/>
+        <CursorPos X="33" Y="44"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\objpas\objpas.pp"/>
+        <EditorIndex Value="5"/>
+        <CursorPos X="45" Y="12"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\dbase\dbf_prscore.pas"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="58"/>
+        <CursorPos X="71" Y="73"/>
+        <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
-    <JumpHistory HistoryIndex="29">
+    <JumpHistory HistoryIndex="28">
       <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="193" Column="11" TopLine="185"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\bufdataset_parser.pp"/>
+        <Caret Line="270" Column="73" TopLine="266"/>
       </Position>
       <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="356" Column="23" TopLine="344"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\bufdataset_parser.pp"/>
+        <Caret Line="146" Column="3" TopLine="128"/>
       </Position>
       <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="1203" Column="29" TopLine="1179"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\bufdataset_parser.pp"/>
+        <Caret Line="101" Column="24" TopLine="78"/>
       </Position>
       <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="11" Column="72"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\bufdataset_parser.pp"/>
+        <Caret Line="205" Column="3" TopLine="323"/>
       </Position>
       <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="146" Column="29" TopLine="382"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\bufdataset_parser.pp"/>
+        <Caret Line="46" Column="20" TopLine="24"/>
       </Position>
       <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="108" Column="28" TopLine="94"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\bufdataset_parser.pp"/>
+        <Caret Line="508" Column="45" TopLine="497"/>
       </Position>
       <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="117" Column="30" TopLine="94"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\bufdataset_parser.pp"/>
+        <Caret Line="46" Column="31" TopLine="29"/>
       </Position>
       <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="118" Column="30" TopLine="94"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\bufdataset_parser.pp"/>
+        <Caret Line="478" Column="47" TopLine="449"/>
       </Position>
       <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="162" Column="17" TopLine="155"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\bufdataset_parser.pp"/>
+        <Caret Line="507" Column="38" TopLine="479"/>
       </Position>
       <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="580" Column="15" TopLine="566"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\bufdataset_parser.pp"/>
+        <Caret Line="508" Column="45" TopLine="479"/>
       </Position>
       <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="598" Column="26" TopLine="589"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\dbase\dbf_prsdef.pas"/>
+        <Caret Line="44" Column="33" TopLine="37"/>
       </Position>
       <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="1209" Column="17" TopLine="1200"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\bufdataset.pas"/>
+        <Caret Line="3811" Column="40" TopLine="3800"/>
       </Position>
       <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="1210" Column="34" TopLine="1200"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\bufdataset.pas"/>
+        <Caret Line="3728" Column="53" TopLine="3710"/>
       </Position>
       <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="1212" Column="20" TopLine="1206"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\bufdataset.pas"/>
+        <Caret Line="612" Column="29" TopLine="596"/>
       </Position>
       <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="1221" Column="49" TopLine="1206"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\bufdataset.pas"/>
+        <Caret Line="2069" Column="38" TopLine="2035"/>
       </Position>
       <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="1222" Column="49" TopLine="1206"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\bufdataset_parser.pp"/>
+        <Caret Line="45" Column="24" TopLine="29"/>
       </Position>
       <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="1541" Column="76" TopLine="1533"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\bufdataset_parser.pp"/>
+        <Caret Line="461" Column="3" TopLine="451"/>
       </Position>
       <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="396" Column="57" TopLine="381"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\bufdataset_parser.pp"/>
+        <Caret Line="18" Column="3"/>
       </Position>
       <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="192" Column="15" TopLine="180"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\dbase\dbf_prscore.pas"/>
+        <Caret Line="67" Column="16" TopLine="57"/>
       </Position>
       <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="396" Column="57" TopLine="374"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\dbase\dbf_prscore.pas"/>
+        <Caret Line="1207" Column="3" TopLine="1202"/>
       </Position>
       <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="1208" Column="51" TopLine="1198"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\dbase\dbf_prscore.pas"/>
+        <Caret Line="76" Column="21" TopLine="54"/>
       </Position>
       <Position>
-        <Filename Value="frm_mainform.pas"/>
-        <Caret Line="44" Column="15" TopLine="36"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\bufdataset_parser.pp"/>
+        <Caret Line="35" Column="26" TopLine="22"/>
       </Position>
       <Position>
-        <Filename Value="frm_mainform.pas"/>
-        <Caret Line="21" Column="32" TopLine="16"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\bufdataset_parser.pp"/>
+        <Caret Line="311" Column="3" TopLine="308"/>
       </Position>
       <Position>
-        <Filename Value="frm_rangeform.pas"/>
-        <Caret Line="6" Column="44"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\bufdataset_parser.pp"/>
+        <Caret Line="35" Column="15" TopLine="22"/>
       </Position>
       <Position>
-        <Filename Value="frm_mainform.pas"/>
-        <Caret Line="108" TopLine="84"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\bufdataset_parser.pp"/>
+        <Caret Line="311" Column="3" TopLine="308"/>
       </Position>
       <Position>
-        <Filename Value="frm_mainform.pas"/>
-        <Caret Line="55" Column="3" TopLine="64"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\bufdataset_parser.pp"/>
+        <Caret Line="31" Column="15" TopLine="22"/>
       </Position>
       <Position>
-        <Filename Value="frm_locatelookupform.pas"/>
-        <Caret Line="4" Column="26"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\bufdataset_parser.pp"/>
+        <Caret Line="342" Column="3" TopLine="337"/>
       </Position>
       <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="351" Column="32" TopLine="344"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\bufdataset_parser.pp"/>
+        <Caret Line="344" Column="27" TopLine="364"/>
       </Position>
       <Position>
-        <Filename Value="frm_locatelookupform.pas"/>
-        <Caret Line="88" Column="20" TopLine="64"/>
-      </Position>
-      <Position>
-        <Filename Value="frm_locatelookupform.pas"/>
-        <Caret Line="25" Column="26" TopLine="41"/>
+        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\dbase\dbf_prscore.pas"/>
+        <Caret Line="60" Column="32" TopLine="59"/>
       </Position>
     </JumpHistory>
     <RunParams>

@@ -1,20 +1,20 @@
 object StatusFilterForm: TStatusFilterForm
-  Left = 387
-  Height = 424
+  Left = 449
+  Height = 307
   Top = 206
-  Width = 544
+  Width = 443
   Caption = 'Status Filter'
-  ClientHeight = 424
-  ClientWidth = 544
+  ClientHeight = 307
+  ClientWidth = 443
   LCLVersion = '3.0.0.3'
   object Panel1: TPanel
     Left = 0
     Height = 106
     Top = 0
-    Width = 544
+    Width = 443
     Align = alTop
     ClientHeight = 106
-    ClientWidth = 544
+    ClientWidth = 443
     TabOrder = 0
     object chUnmodified: TCheckBox
       Left = 24
@@ -55,7 +55,7 @@ object StatusFilterForm: TStatusFilterForm
       TabOrder = 3
     end
     object lblStatus: TLabel
-      Left = 400
+      Left = 192
       Height = 15
       Top = 80
       Width = 45
@@ -80,9 +80,9 @@ object StatusFilterForm: TStatusFilterForm
   end
   object Grid: TDBGrid
     Left = 0
-    Height = 318
+    Height = 201
     Top = 106
-    Width = 544
+    Width = 443
     Align = alClient
     Color = clWindow
     Columns = <>

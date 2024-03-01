@@ -1,17 +1,17 @@
 object MasterDetailForm: TMasterDetailForm
   Left = 584
-  Height = 355
+  Height = 263
   Top = 289
-  Width = 509
+  Width = 369
   Caption = 'Master Detail'
-  ClientHeight = 355
-  ClientWidth = 509
+  ClientHeight = 263
+  ClientWidth = 369
   LCLVersion = '3.0.0.3'
   object gridMaster: TDBGrid
     Left = 0
-    Height = 171
+    Height = 123
     Top = 0
-    Width = 509
+    Width = 369
     Align = alTop
     Color = clWindow
     Columns = <>
@@ -21,8 +21,8 @@ object MasterDetailForm: TMasterDetailForm
     Cursor = crVSplit
     Left = 0
     Height = 5
-    Top = 171
-    Width = 509
+    Top = 123
+    Width = 369
     Align = alTop
     Color = clGray
     ParentColor = False
@@ -30,9 +30,9 @@ object MasterDetailForm: TMasterDetailForm
   end
   object gridDetail: TDBGrid
     Left = 0
-    Height = 179
-    Top = 176
-    Width = 509
+    Height = 135
+    Top = 128
+    Width = 369
     Align = alClient
     Color = clWindow
     Columns = <>

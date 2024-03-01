@@ -14,7 +14,8 @@ uses
   , StdCtrls
   , DB
 
-
+  , BufDataset
+  , bufdataset_parser
   ,o_App
   ;
 
@@ -24,6 +25,7 @@ type
 
   TMainForm = class(TForm)
     btnLocateLookup: TButton;
+    btnBlobs: TButton;
     btnSort: TButton;
     btnSimple: TButton;
     btnMasterDetail: TButton;
@@ -54,6 +56,7 @@ uses
   ,frm_StatusFilterForm
   ,frm_RangeForm
   ,frm_LocateLookupForm
+  ,frm_BlobForm
   ;
 
 { TMainForm }
@@ -72,6 +75,8 @@ begin
        ShowModalForm(TRangeForm)
    else if (btnLocateLookup = Sender) then
        ShowModalForm(TLocateLookupForm)
+   else if (btnBlobs = Sender) then
+       ShowModalForm(TBlobForm)
    ;
 end;
 
@@ -110,6 +115,7 @@ begin
   btnStatusFilter.OnClick := @AnyClick;
   btnRange.OnClick := @AnyClick;
   btnLocateLookup.OnClick := @AnyClick;
+  btnBlobs.OnClick := @AnyClick;
 end;
 
 end.

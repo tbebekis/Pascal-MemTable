@@ -1,26 +1,26 @@
 object SortForm: TSortForm
-  Left = 499
-  Height = 377
-  Top = 157
-  Width = 595
+  Left = 466
+  Height = 240
+  Top = 255
+  Width = 409
   Caption = 'Sort'
-  ClientHeight = 377
-  ClientWidth = 595
+  ClientHeight = 240
+  ClientWidth = 409
   LCLVersion = '3.0.0.3'
   object Panel1: TPanel
     Left = 0
     Height = 34
     Top = 0
-    Width = 595
+    Width = 409
     Align = alTop
     Caption = 'Click on a column caption to sort the column'
     TabOrder = 0
   end
   object Grid: TDBGrid
     Left = 0
-    Height = 343
+    Height = 206
     Top = 34
-    Width = 595
+    Width = 409
     Align = alClient
     Color = clWindow
     Columns = <>

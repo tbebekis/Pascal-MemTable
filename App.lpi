@@ -84,6 +84,7 @@
         <Filename Value="frm_statusfilterform.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="StatusFilterForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_StatusFilterForm"/>
       </Unit>
@@ -91,6 +92,7 @@
         <Filename Value="frm_rangeform.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="RangeForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_RangeForm"/>
       </Unit>
@@ -100,6 +102,13 @@
         <ComponentName Value="LocateLookupForm"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_LocateLookupForm"/>
+      </Unit>
+      <Unit>
+        <Filename Value="frm_blobform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="BlobForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="frm_BlobForm"/>
       </Unit>
     </Units>
   </ProjectOptions>

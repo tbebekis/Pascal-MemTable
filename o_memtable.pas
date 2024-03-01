@@ -76,7 +76,7 @@ type
 type
   PRecInfo = ^TRecInfo;
   TRecInfo = record
-    Bookmark       : Integer;         // the BookMark actually
+    Bookmark       : Integer;         // the BookMark
     BookmarkFlag   : TBookmarkFlag;   // = (bfCurrent, bfBOF, bfEOF, bfInserted)
     Status         : TUpdateStatus;   // = (usUnmodified, usModified, usInserted, usDeleted)
   end;
@@ -1158,6 +1158,7 @@ var
   i      : Integer;
   RecBuf : PChar;
   FreeList : TList;
+  RowStatus : TUpdateStatus;
 begin
   Lock();
   try

@@ -1,59 +1,69 @@
 object MainForm: TMainForm
-  Left = 570
-  Height = 240
-  Top = 206
-  Width = 320
+  Left = 353
+  Height = 227
+  Top = 236
+  Width = 273
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
   Caption = 'TMemTable Demo'
-  ClientHeight = 240
-  ClientWidth = 320
+  ClientHeight = 227
+  ClientWidth = 273
   Position = poWorkAreaCenter
   LCLVersion = '3.0.0.3'
   object btnSimple: TButton
-    Left = 16
+    Left = 24
     Height = 25
-    Top = 8
-    Width = 235
+    Top = 16
+    Width = 224
     Caption = 'Simple'
     TabOrder = 0
   end
   object btnMasterDetail: TButton
-    Left = 16
+    Left = 24
     Height = 25
-    Top = 36
-    Width = 235
+    Top = 44
+    Width = 224
     Caption = 'Master-Detail'
     TabOrder = 1
   end
   object btnSort: TButton
-    Left = 16
+    Left = 24
     Height = 25
-    Top = 64
-    Width = 235
+    Top = 72
+    Width = 224
     Caption = 'Sort'
     TabOrder = 2
   end
   object btnStatusFilter: TButton
-    Left = 16
+    Left = 24
     Height = 25
-    Top = 92
-    Width = 235
+    Top = 100
+    Width = 224
     Caption = 'Status Filter'
     TabOrder = 3
   end
   object btnRange: TButton
-    Left = 16
+    Left = 24
     Height = 25
-    Top = 120
-    Width = 235
+    Top = 128
+    Width = 224
     Caption = 'Range'
     TabOrder = 4
   end
   object btnLocateLookup: TButton
-    Left = 16
+    Left = 24
     Height = 25
-    Top = 148
-    Width = 235
+    Top = 156
+    Width = 224
     Caption = 'Locate/Lookup'
     TabOrder = 5
+  end
+  object btnBlobs: TButton
+    Left = 24
+    Height = 25
+    Top = 184
+    Width = 224
+    Caption = 'Blobs'
+    TabOrder = 6
   end
 end
