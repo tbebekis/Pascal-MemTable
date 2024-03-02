@@ -107,6 +107,7 @@
         <Filename Value="frm_blobform.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="BlobForm"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_BlobForm"/>
       </Unit>

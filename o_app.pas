@@ -11,7 +11,7 @@ uses
   , Controls
   , Graphics
   , Dialogs
-  , DB
+  //, DB
   , DBCtrls
   , DBGrids
   ;

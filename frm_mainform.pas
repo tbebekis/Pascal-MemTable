@@ -12,11 +12,11 @@ uses
   , Graphics
   , Dialogs
   , StdCtrls
-  , DB
+  //, DB
 
-  , BufDataset
-  , bufdataset_parser
-  ,o_App
+  //, BufDataset
+  //, bufdataset_parser
+  //,o_App
   ;
 
 type
