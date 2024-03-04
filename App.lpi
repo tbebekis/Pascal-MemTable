@@ -111,6 +111,11 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_BlobForm"/>
       </Unit>
+      <Unit>
+        <Filename Value="o_filterparser.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="o_FilterParser"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

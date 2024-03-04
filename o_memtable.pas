@@ -5,6 +5,8 @@ unit o_MemTable;
 //{$DEFINE CURSOR_DEBUG}
 {$DEFINE STRING_BLOBS}      { see comments below for Blob buffer layout }
 {$WARN 6058 off : Call to subroutine "$1" marked as inline is not inlined}
+{$WARN 5024 off : Parameter "$1" not used}
+
 interface
 
 uses
@@ -20,11 +22,16 @@ uses
   //,TypInfo
 
   ,DB
-  //,DBConst
   ,FmtBCD
 
+  //,dbf_prscore
+  //,dbf_prsdef
 
+  ,o_FilterParser
   ;
+
+
+
 
 
 type
@@ -182,8 +189,8 @@ type
     FStatusOptions             : TUpdateStatusSet;
     FKeyBuffers                : array[TKeyBufferIndex] of PChar;
 
-    //FFilterParser              : TFilterParser;
-    //FFilterData                : PChar;
+    FFilterParser              : TFilterParser;
+    FFilterData                : TRecordBuffer;
     FEmptyBlob                 : TBlob;
 
     FMasterLink                : TMasterDataLink;
@@ -192,6 +199,7 @@ type
     FIsInRange                 : Boolean;
     FRangeExclusive            : Boolean;
     FInitialized               : Boolean;
+
 
     function  GetMasterDataSource: TDataSource;
     function  GetMasterFieldNames: string;
@@ -321,6 +329,12 @@ type
     procedure InternalOpen; override;
     procedure InternalClose; override;
 
+    procedure SetFiltered(Value: Boolean); override;
+    procedure SetFilterOptions(Value: TFilterOptions); override;
+    procedure SetFilterText(const Value: string); override;
+    procedure SetOnFilterRecord(const Value: TFilterRecordEvent); override;
+    procedure ActivateFilter(Value: Boolean);
+
     { miscs }
     procedure InternalInitFieldDefs; override;
     procedure ClearCalcFields(RecBuf: TRecordBuffer); override;
@@ -423,12 +437,11 @@ type
 
 implementation
 
+uses
+  DBConst
+  ;
 
 
-const
-  SFieldReadOnly = 'Field ''%s'' cannot be modified';
-  SNotEditing = 'Dataset not in edit or insert mode';
-  SCircularDataLink = 'Circular datalinks are not allowed';
 
 
 
@@ -501,9 +514,9 @@ begin
     if FMode <> bmRead then
     begin
       if FField.ReadOnly then
-        DatabaseErrorFmt(SFieldReadOnly, [FField.DisplayName], FField.DataSet);
+        DatabaseErrorFmt(SReadOnlyField, [FField.DisplayName], FField.DataSet);
       if not (FField.DataSet.State in [dsEdit, dsInsert, dsNewValue]) then
-        DatabaseError(SNotEditing, FField.DataSet);
+        DatabaseErrorFmt(SNotEditing, [Dataset.Name], FField.DataSet);
     end;
 
     if FMode = bmWrite then    { truncate the blob data }
@@ -558,10 +571,6 @@ end;
 
 
 
-
-
-
-
 { TMemTable }
 
 constructor TMemTable.Create(AOwner: TComponent);
@@ -586,6 +595,8 @@ begin
 
   FStatusOptions    := [usModified, usInserted, usUnmodified];
 
+  FFilterParser      := TFilterParser.Create;
+
   FCurRecIndex      := -1;
 end;
 
@@ -593,6 +604,10 @@ destructor TMemTable.Destroy;
 begin
   inherited Destroy;
 
+  if Assigned(FFilterData) then
+    FreeMem(FFilterData);
+
+  FreeAndNil(FFilterParser);
 
   FreeAndNil(FModifiedFields);
   FreeAndNil(FRangeFields);
@@ -981,7 +996,7 @@ var
 begin
   for i := 0 to FieldCount - 1 do
     if not IsSupportedFieldType(Fields[i].DataType) then
-      DatabaseErrorFmt('Unsupported field type: %s', [Fields[i].FieldName]);
+      DatabaseErrorFmt(SUnsupportedFieldType, [Fields[i].DisplayName], Self);
 
   InternalInitFieldDefs();
 
@@ -1005,6 +1020,83 @@ begin
   if DefaultFields then
     DestroyFields;
 end;
+
+procedure TMemTable.SetFiltered(Value: Boolean);
+begin
+  if (Filtered <> Value) then
+  begin
+    inherited SetFiltered(Value);
+    ActivateFilter(Value);
+  end;
+end;
+
+procedure TMemTable.SetFilterOptions(Value: TFilterOptions);
+begin
+  if (FilterOptions <> Value) then
+  begin
+    inherited SetFilterOptions(Value);
+    ActivateFilter(not Filtered);  // de-activate
+    ActivateFilter(Filtered);      // and activate again
+  end;
+end;
+
+procedure TMemTable.SetFilterText(const Value: string);
+begin
+  if (Filter <> Value) then
+  begin
+    inherited SetFilterText(Value);
+    ActivateFilter(Length(Value) > 0);
+  end;
+end;
+procedure TMemTable.SetOnFilterRecord(const Value: TFilterRecordEvent);
+begin
+  if (OnFilterRecord <> Value) then
+  begin
+    inherited SetOnFilterRecord(Value);
+    ActivateFilter(Assigned(OnFilterRecord));
+  end;
+
+end;
+
+procedure TMemTable.ActivateFilter(Value: Boolean);
+begin
+  if IsCursorOpen() then
+  begin
+    if not Value then
+    begin
+      FModes := FModes - [cmFilter];
+
+      if Assigned(FFilterParser) then
+        FreeAndNil(FFilterParser);
+      if Assigned(FFilterData) then
+         FreeMem(FFilterData);
+    end
+    else if Assigned(OnFilterRecord) or (Filtered and (Length(Filter) > 0)) then
+    begin
+      FModes := FModes + [cmFilter];
+
+      if Filtered and (Length(Filter) > 0) then
+      begin
+        {
+        if not Assigned(FFilterParser) then
+        begin
+          FFilterParser := TFilterParser.Create(Self);
+        end;
+
+        FFilterParser.PartialMatch := not (foNoPartialCompare in FilterOptions);
+        FFilterParser.CaseInsensitive := foCaseInsensitive in FilterOptions;
+
+        FFilterParser.ParseExpression(Filter);
+        }
+      end;
+
+    end;
+
+    Rebuild();
+  end;
+
+end;
+
 procedure TMemTable.Initialize;
 var
   i             : Integer;
@@ -1135,6 +1227,9 @@ begin
       FBlobFields.Clear;
       ClearObjectList(FFields);
 
+      if Assigned(FFilterParser) then
+         FreeAndNil(FFilterParser);
+
       FRecBufSize                := 0;
 
       FCalcOfs                   := 0;
@@ -1193,9 +1288,6 @@ begin
       FreeList.Free;
     end;
 
-
-
-    //FAllRows.Clear;
 
     CurRecIndex := -1;
   finally
@@ -1375,14 +1467,14 @@ begin
   RecBuf := nil;
 
   if not (State in dsWriteModes) then
-    DatabaseError(SNotEditing);
+    DatabaseErrorFmt(SNotEditing, [Self.Name], Self);
 
   GetActiveRecBuf(RecBuf);
 
   if Field.FieldKind in [fkData, fkInternalCalc] then
   begin
     if Field.ReadOnly and not (State in [dsSetKey, dsFilter]) then
-      DatabaseErrorFmt(SFieldReadOnly, [Field.DisplayName]);
+      DatabaseErrorFmt(SReadOnlyField, [Field.DisplayName], Self);
     Field.Validate(Buffer);
 
     if FModifiedFields.IndexOf(Field) = -1 then
@@ -1539,6 +1631,7 @@ function TMemTable.CanDisplayRecord(RecBuf: TRecordBuffer): Boolean;
 var
   RRS, RRE : Integer; // Range Results
   TempStatusOptions : TUpdateStatusSet;
+  Accept : Boolean;
 begin
 
   Result := (FModes * [cmStatus, cmLink, cmRange, cmFilter] = []);
@@ -1577,19 +1670,25 @@ begin
     end;
 
 
-    { TODO: filter
+    { TODO: filter }
     if (cmFilter in FModes) then
     begin
 
-      if Assigned(FOnRecordFilter) then
-        if not FOnRecordFilter(RecBuf) then
+      if Assigned(OnFilterRecord) then
+      begin
+        Accept := True;
+        OnFilterRecord(Self, Accept);
+        if not Accept then
           Exit; //==>
+      end;
 
+      {
       if Assigned(FFilterData) then
         if not FFilterParser.FilterRecord(RecBuf, FFilterData, FilterParser_OnExtractFieldValue) then
           Exit; //==>
+      }
     end;
-    }
+
 
     Result := True;
   end;
@@ -2688,7 +2787,7 @@ procedure TMemTable.SetMasterDataSource(Value: TDataSource);
 begin
   if IsLinkedTo(Value) then
     if Value.IsLinkedTo(Self) then
-      DatabaseError(SCircularDataLink);
+      DatabaseError(SErrCircularDataSourceReferenceNotAllowed);
 
   FMasterLink.DataSource := Value;
 end;
@@ -3012,6 +3111,7 @@ class function  TMemTable.Max(const A, B: Integer): Integer;
 begin
   if A > B then Result := A else Result := B;
 end;
+
 
 
 
