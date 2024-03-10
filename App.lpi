@@ -116,6 +116,13 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="o_FilterParser"/>
       </Unit>
+      <Unit>
+        <Filename Value="frm_filterform.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FilterForm"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="frm_FilterForm"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

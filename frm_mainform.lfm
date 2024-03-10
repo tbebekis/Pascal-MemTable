@@ -1,12 +1,12 @@
 object MainForm: TMainForm
   Left = 353
-  Height = 227
+  Height = 255
   Top = 236
   Width = 273
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'TMemTable Demo'
-  ClientHeight = 227
+  ClientHeight = 255
   ClientWidth = 273
   Position = poWorkAreaCenter
   LCLVersion = '3.0.0.3'
@@ -65,5 +65,13 @@ object MainForm: TMainForm
     Width = 224
     Caption = 'Blobs'
     TabOrder = 6
+  end
+  object btnFilter: TButton
+    Left = 24
+    Height = 25
+    Top = 212
+    Width = 224
+    Caption = 'Filter'
+    TabOrder = 7
   end
 end

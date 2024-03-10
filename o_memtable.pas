@@ -24,7 +24,7 @@ uses
   ,DB
   ,FmtBCD
 
-  //,dbf_prscore
+  ,dbf_prscore
   //,dbf_prsdef
 
   ,o_FilterParser
@@ -199,7 +199,6 @@ type
     FIsInRange                 : Boolean;
     FRangeExclusive            : Boolean;
     FInitialized               : Boolean;
-
 
     function  GetMasterDataSource: TDataSource;
     function  GetMasterFieldNames: string;
@@ -595,7 +594,7 @@ begin
 
   FStatusOptions    := [usModified, usInserted, usUnmodified];
 
-  FFilterParser      := TFilterParser.Create;
+  FFilterParser      := TFilterParser.Create(Self);
 
   FCurRecIndex      := -1;
 end;
@@ -859,7 +858,6 @@ procedure TMemTable.InternalAddRecord(RecBuf: Pointer; IsAppend: Boolean);
 var
   DestRecBuf    : TRecordBuffer;
   RecIndex      : Integer;
-
 begin
   Lock();
   try
@@ -1077,7 +1075,6 @@ begin
 
       if Filtered and (Length(Filter) > 0) then
       begin
-        {
         if not Assigned(FFilterParser) then
         begin
           FFilterParser := TFilterParser.Create(Self);
@@ -1087,7 +1084,6 @@ begin
         FFilterParser.CaseInsensitive := foCaseInsensitive in FilterOptions;
 
         FFilterParser.ParseExpression(Filter);
-        }
       end;
 
     end;
@@ -1394,37 +1390,62 @@ function TMemTable.GetRecordCount: Integer;
 begin
   Result := FRows.Count;
 end;
+
+function IsEmptyBuffer(Buf: PByte; Size: Integer): Boolean;
+var
+  i : Integer;
+begin
+  for i := 0 to Size - 1 do
+  begin
+    if Buf^ <> 0 then
+    begin
+      Result := False;
+      Exit;
+    end else begin
+      Inc(Buf, 1);
+    end;
+  end;
+
+  Result := True;
+end;
 function TMemTable.GetFieldDataInternal(RecBuf: TRecordBuffer; Buffer: PChar; FieldIndex: Integer): Boolean;
 var
   P          : TRecordBuffer;
 begin
   Lock();
   try
-    P          := RecBuf + FOffsets[FieldIndex];
-    Result     := Boolean(P[0]);
-    if Result and Assigned(Buffer) then
+    if Assigned(Buffer) then
     begin
-      FillChar(Buffer^, FSizes[FieldIndex], 0);
-      Inc(P);
-      Move(P^, Buffer^, FSizes[FieldIndex]);
+      P          := RecBuf + FOffsets[FieldIndex];
+      Result     := Boolean(P[0]);
+
+      if Result then
+      begin
+        FillChar(Buffer^, FSizes[FieldIndex], 0);
+        Inc(P);
+        Move(P^, Buffer^, FSizes[FieldIndex]);
+      end;
     end;
+
   finally
     UnLock();
   end;
 end;
+
+
 procedure TMemTable.SetFieldDataInternal(RecBuf: TRecordBuffer; Buffer: PChar; FieldIndex: Integer);
 var
   P             : TRecordBuffer;
-  V             : Byte;
+  HasData       : LongBool;
 begin
   Lock();
   try
     P             := RecBuf + FOffsets[FieldIndex];
-    V             := PByte(Buffer)^;
-    Byte(P[0])    := V;
+    HasData       := not IsEmptyBuffer(PByte(Buffer), FSizes[FieldIndex]); //   LongBool(Buffer);
+    Boolean(P[0]) := HasData;
     Inc(P);
 
-    if V <> 0 then
+    if HasData then
     begin
       Move(Buffer^, P^, FSizes[FieldIndex])
     end else begin
@@ -1669,7 +1690,6 @@ begin
       end;
     end;
 
-
     { TODO: filter }
     if (cmFilter in FModes) then
     begin
@@ -1680,6 +1700,13 @@ begin
         OnFilterRecord(Self, Accept);
         if not Accept then
           Exit; //==>
+      end;
+
+      if Assigned(FFilterParser) and (Length(Filter) > 0) then
+      begin
+        //Boolean((FFilterParser.ExtractFromBuffer(RecBuf))^);
+        if not FFilterParser.FilterRecord(RecBuf) then
+           Exit; //==>
       end;
 
       {

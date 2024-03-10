@@ -25,6 +25,7 @@ type
   { TMainForm }
 
   TMainForm = class(TForm)
+    btnFilter: TButton;
     btnLocateLookup: TButton;
     btnBlobs: TButton;
     btnSort: TButton;
@@ -58,6 +59,7 @@ uses
   ,frm_RangeForm
   ,frm_LocateLookupForm
   ,frm_BlobForm
+  ,frm_FilterForm
   ;
 
 { TMainForm }
@@ -78,6 +80,8 @@ begin
        ShowModalForm(TLocateLookupForm)
    else if (btnBlobs = Sender) then
        ShowModalForm(TBlobForm)
+   else if (btnFilter = Sender) then
+          ShowModalForm(TFilterForm)
    ;
 end;
 
@@ -117,6 +121,7 @@ begin
   btnRange.OnClick := @AnyClick;
   btnLocateLookup.OnClick := @AnyClick;
   btnBlobs.OnClick := @AnyClick;
+  btnFilter.OnClick := @AnyClick;
 end;
 
 end.

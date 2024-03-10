@@ -13,7 +13,7 @@ uses
   , Dialogs
   , DB
   , DBCtrls
-  , DBGrids, ExtCtrls
+  , DBGrids, ExtCtrls, StdCtrls
 
   ,O_App
   ,o_MemTable
@@ -25,6 +25,7 @@ type
 
   TSortForm = class(TForm)
     Grid: TDBGrid;
+    Label1: TLabel;
     Panel1: TPanel;
   private
     DS: TDatasource;
@@ -48,6 +49,8 @@ procedure TSortForm.InitializeTest();
 var
   i: Integer;
 begin
+  Label1.Caption := 'Click on a column caption to sort the column' + #10 + 'Cycles through Asc, Desc and None';
+
   // master
   Table := TMemTable.Create(Self);
   Table.FieldDefs.Add('Id', ftAutoInc);
