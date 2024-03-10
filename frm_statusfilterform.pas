@@ -89,6 +89,8 @@ begin
 
   Table.AfterScroll := @Table_OnAfterScroll;
 
+  Table.CancelUpdates();
+
 end;
 
 procedure TStatusFilterForm.AnyClick(Sender: TObject);

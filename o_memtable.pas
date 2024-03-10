@@ -79,6 +79,8 @@ type
  TRecInfo layout      : see below
  ============================================================================*)
 
+type
+  TFieldBuffer = Pointer;
 
 type
   PRecInfo = ^TRecInfo;
@@ -108,7 +110,7 @@ type
                      ,bmLE
                      );
 
- type
+type
    { the cursor may be in one or more modes }
    TCursorMode = ( cmStatus
                    ,cmLink
@@ -119,7 +121,7 @@ type
 
    TCursorModes = set of TCursorMode;
 
- type
+type
    TKeyBufferIndex = (biMaster
                      ,biRangeStart
                      ,biRangeEnd
@@ -178,8 +180,8 @@ type
     FBookOfs                   : Integer;
 
     { field attribute arrays }
-    FFieldTypes                : array of TFieldType;     // FTypes
-    FSizes                     : array of Integer;        { data size of field }
+    FFieldTypes                : array of TFieldType;
+    FFieldBufferSizes          : array of Integer;        { data size of field }
     FOffsets                   : array of Integer;        { offset of a field data. The first byte is the Null Flag  byte }
 
     FCurRecIndex               : Integer;                 { the current record index in the FRows list }
@@ -221,8 +223,10 @@ type
     procedure DeleteRows;
 
     { get/set field data }
-    function  GetFieldDataInternal(RecBuf: TRecordBuffer; Buffer: PChar; FieldIndex: Integer): Boolean;
-    procedure SetFieldDataInternal(RecBuf: TRecordBuffer; Buffer: PChar; FieldIndex: Integer);
+    function  GetFieldDataInternal(RecBuf: TRecordBuffer; Buffer: PChar; const FieldIndex: Integer): Boolean;
+    procedure SetFieldDataInternal(RecBuf: TRecordBuffer; Buffer: PChar; const FieldIndex: Integer);
+
+    function  IsFieldBufferNull(FieldBuf: TFieldBuffer; Size: Integer): Boolean;
 
     { blobs }
     procedure InitializeBlobs(RecBuf: TRecordBuffer);
@@ -255,8 +259,7 @@ type
     procedure GetFieldInfoList(List: TList; const FieldNames: string); overload;
     function  GetFieldInfoList(const FieldNames: string): TList; overload;
 
-    function  GetFieldDataSize(FieldInfo: TFieldInfo): Integer;
-    function  GetFieldSize(FieldInfo: TFieldInfo): Integer;
+    function  GetFieldBufferSize(FieldInfo: TFieldInfo): Integer;
 
     { blobs }
     function  GetBlobSize(RecBuf: PChar; FieldIndex: Integer): LongWord;
@@ -274,12 +277,11 @@ type
     function  LocateRecord(const IndexFieldNames: string; const KeyValues: Variant; Options: TLocateOptions; SyncCursor: Boolean; var RecIndex: Integer): Boolean; overload;
     function  LocateRecord(const KeyFields: string; const KeyValues: Variant; Options: TLocateOptions; SyncCursor: Boolean): Boolean;  overload;
 
-    { field get/set value }
-    function  IsFieldNull(const FieldIndex: Integer; RecBuf: TRecordBuffer): Boolean;
-    function  GetFieldValue(const FieldIndex: Integer; RecBuf: TRecordBuffer): Variant;
-    procedure SetFieldValue(const FieldIndex: Integer; RecBuf: TRecordBuffer; const Value: Variant);
-    function  GetValue(const FieldIndex: Integer; FieldData: Pointer): Variant;
-    procedure SetValue(const FieldIndex: Integer; FieldData: Pointer; Value: Variant);
+    { field get/set value as Variant }
+    function  GetValueFromRecBuf(RecBuf: TRecordBuffer; const FieldIndex: Integer): Variant;
+    procedure SetValueToRecBuf(RecBuf: TRecordBuffer; const FieldIndex: Integer; const Value: Variant);
+    function  GetValueFromFieldBuf(FieldBuf: TFieldBuffer; const FieldIndex: Integer): Variant;
+    procedure SetValueToFieldBuf(FieldBuf: TFieldBuffer; const FieldIndex: Integer; Value: Variant);
 
     { master-detail }
     procedure OnMasterLinkChanged(Sender: TObject);
@@ -292,7 +294,6 @@ type
 
     { miscs }
     procedure LoadIndexFieldList();
-    function  IsFieldBufferNull(Buf: PChar): Boolean;
     procedure VariantValuesToRecordBuffer(FieldList: TList; RecBuf: PChar; Values: Variant);
   protected
     {== TDataset overrides ==}
@@ -800,8 +801,6 @@ begin
      FCurRecIndex := Value;
 end;
 
-
-
 procedure TMemTable.InternalInitRecord(RecBuf: TRecordBuffer);
 begin
   FillChar(RecBuf^, FRecBufSize, 0);
@@ -811,20 +810,20 @@ procedure TMemTable.InternalAddRecord(RecBuf: Pointer; IsAppend: Boolean);
   function GetNextAutoIncValue(FieldIndex: Integer): Integer;
   var
     i             : Integer;
-    pRec          : TRecordBuffer;
-    pField        : TRecordBuffer;
+    RecBuf2       : TRecordBuffer;
+    FieldBuf      : TFieldBuffer;
     V             : Integer;
   begin
     Result := 0;
 
     for i := 0 to FAllRows.Count -1 do
     begin
-      pRec := TRecordBuffer(FAllRows[i]);
-      pField  := pRec + FOffsets[FieldIndex];
-      if not IsFieldBufferNull(pField) then
+      RecBuf2 := TRecordBuffer(FAllRows[i]);
+      FieldBuf  := RecBuf2 + FOffsets[FieldIndex];
+      if not IsFieldBufferNull(FieldBuf, FFieldBufferSizes[FieldIndex]) then
       begin
-        Inc(pField);
-        V := PInteger(pField)^;
+        //Inc(FieldBuf);
+        V := PInteger(FieldBuf)^;
         Result := Max(Result, V);
       end;
     end;
@@ -837,7 +836,9 @@ procedure TMemTable.InternalAddRecord(RecBuf: Pointer; IsAppend: Boolean);
     i             : Integer;
     FieldInfo     : TFieldInfo;
     Field         : TField;
-    P             : TRecordBuffer;
+    P             : TFieldBuffer;
+    V             : Integer;
+    //Flag          : Boolean;
   begin
     for i := 0 to FFields.Count - 1 do
     begin
@@ -845,12 +846,15 @@ procedure TMemTable.InternalAddRecord(RecBuf: Pointer; IsAppend: Boolean);
       if FieldInfo.IsAutoInc then
       begin
         Field := FieldInfo.Field;
+        V :=  GetNextAutoIncValue(Field.Index);
+        P := RecBuf + FOffsets[Field.Index];
+        //Byte(P[0])    := Byte(1);
 
-        P             := RecBuf + FOffsets[Field.Index];
-        Byte(P[0])    := Byte(1);
-        Inc(P);
-
-        PInteger(P)^ := GetNextAutoIncValue(Field.Index);
+        //Inc(P);
+        //Move(Buffer^, P^, FFieldBufferSizes[Field.Index])
+        //PInteger(P)^ := V;
+        Integer(P^) := V;
+        //Flag := IsFieldBufferNull(P, FFieldBufferSizes[Field.Index]);
       end;
     end;
   end;
@@ -1146,7 +1150,7 @@ begin
       FFields.AddList(FBlobFields);
 
       SetLength(FFieldTypes   , FFields.Count);
-      SetLength(FSizes        , FFields.Count);
+      SetLength(FFieldBufferSizes        , FFields.Count);
       SetLength(FOffsets      , FFields.Count);
 
       { process the FieldInfo list, feed the property arrays, calculate FieldInfo offsets, and FieldInfo section sizes }
@@ -1163,17 +1167,17 @@ begin
         IsBlob    := IsBlobFieldType(Field.DataType);
 
         FFieldTypes[i]  := Field.DataType;
-        FSizes[i]       := GetFieldSize(FieldInfo);
+        FFieldBufferSizes[i]       := GetFieldBufferSize(FieldInfo);
 
         FOffsets[Field.Index]  := Ofs;
-        Ofs                    := Ofs + FSizes[i] + 1;
+        Ofs                    := Ofs + FFieldBufferSizes[i]; // + 1;
 
         if (Field.FieldKind in [fkData, fkInternalCalc]) and (not IsBlob) then             { plain data fields }
-          DataSize := DataSize + FSizes[i] + 1
+          DataSize := DataSize + FFieldBufferSizes[i] // + 1
         else if (not (Field.FieldKind in [fkData, fkInternalCalc])) and (not IsBlob) then  { look up fields }
-          CalcsSize := CalcsSize + FSizes[i] + 1
+          CalcsSize := CalcsSize + FFieldBufferSizes[i] // + 1
         else if IsBlob then                                                                { blob fields }
-          BlobsSize := BlobsSize + FSizes[i] + 1;
+          BlobsSize := BlobsSize + FFieldBufferSizes[i]; // + 1;
       end;
 
 
@@ -1233,7 +1237,7 @@ begin
       FBookOfs                   := 0;
 
       FFieldTypes                := nil;
-      FSizes                     := nil;
+      FFieldBufferSizes          := nil;
       FOffsets                   := nil;
 
       FInitialized := False;
@@ -1379,7 +1383,6 @@ begin
 
   inherited DoOnNewRecord;
 end;
-
 procedure TMemTable.DoAfterScroll;
 begin
   FModifiedFields.Clear;
@@ -1391,39 +1394,22 @@ begin
   Result := FRows.Count;
 end;
 
-function IsEmptyBuffer(Buf: PByte; Size: Integer): Boolean;
+function TMemTable.GetFieldDataInternal(RecBuf: TRecordBuffer; Buffer: PChar; const FieldIndex: Integer): Boolean;
 var
-  i : Integer;
-begin
-  for i := 0 to Size - 1 do
-  begin
-    if Buf^ <> 0 then
-    begin
-      Result := False;
-      Exit;
-    end else begin
-      Inc(Buf, 1);
-    end;
-  end;
-
-  Result := True;
-end;
-function TMemTable.GetFieldDataInternal(RecBuf: TRecordBuffer; Buffer: PChar; FieldIndex: Integer): Boolean;
-var
-  P          : TRecordBuffer;
+  P          : TFieldBuffer;
 begin
   Lock();
   try
     if Assigned(Buffer) then
     begin
       P          := RecBuf + FOffsets[FieldIndex];
-      Result     := Boolean(P[0]);
+      Result     := not IsFieldBufferNull(P, FFieldBufferSizes[FieldIndex]); // Result     := Boolean(P[0]);
 
       if Result then
       begin
-        FillChar(Buffer^, FSizes[FieldIndex], 0);
-        Inc(P);
-        Move(P^, Buffer^, FSizes[FieldIndex]);
+        FillChar(Buffer^, FFieldBufferSizes[FieldIndex], 0);
+        //Inc(P);
+        Move(P^, Buffer^, FFieldBufferSizes[FieldIndex]);
       end;
     end;
 
@@ -1432,24 +1418,22 @@ begin
   end;
 end;
 
-
-procedure TMemTable.SetFieldDataInternal(RecBuf: TRecordBuffer; Buffer: PChar; FieldIndex: Integer);
+procedure TMemTable.SetFieldDataInternal(RecBuf: TRecordBuffer; Buffer: PChar; const FieldIndex: Integer);
 var
-  P             : TRecordBuffer;
-  HasData       : LongBool;
+  P             : TFieldBuffer;
+  HasData       : Boolean;
 begin
   Lock();
   try
     P             := RecBuf + FOffsets[FieldIndex];
-    HasData       := not IsEmptyBuffer(PByte(Buffer), FSizes[FieldIndex]); //   LongBool(Buffer);
-    Boolean(P[0]) := HasData;
-    Inc(P);
+    HasData       := not IsFieldBufferNull(Buffer, FFieldBufferSizes[FieldIndex]);
+    //Inc(P);
 
     if HasData then
     begin
-      Move(Buffer^, P^, FSizes[FieldIndex])
+      Move(Buffer^, P^, FFieldBufferSizes[FieldIndex])
     end else begin
-      FillChar(P^, FSizes[FieldIndex], 0);
+      FillChar(P^, FFieldBufferSizes[FieldIndex], 0);
     end;
   finally
     UnLock();
@@ -1519,8 +1503,6 @@ begin
 
 
 end;
-
-
 
 procedure TMemTable.Lock;
 begin
@@ -1728,14 +1710,12 @@ begin
                        RecBuf := nil
                      else
                        RecBuf := ActiveBuffer();
-
-
     dsEdit         ,
     dsInsert       : RecBuf := ActiveBuffer();
 
     dsCalcFields   ,
     dsInternalCalc : RecBuf := CalcBuffer;
-    //TODO: dsFilter       : RecBuf := FFilterBuffer;
+    //dsFilter       : RecBuf := FFilterBuffer;     // TODO:  dsFilter
 
     dsNewValue     ,
     dsOldValue     ,
@@ -1872,12 +1852,6 @@ begin
   begin
     FieldInfo := TFieldInfo.Create(Fields[i]);
     FFields.Add(FieldInfo);
-    //AddField(Fields[i].FieldName, Fields[i].DataType, Fields[i].FieldKind, Fields[i].Size, Fields[i].FieldNo, Fields[i]).DisplayLabel := Fields[i].DisplayLabel;
-  end;
-
-  if Assigned(Fields.DataSet) then
-  begin
-    // TODO: FCalcFieldsSize := _TDataset(Fields.DataSet).CalcFieldsSize;
   end;
 
 end;
@@ -1943,7 +1917,7 @@ begin
   Result := TList.Create();
   GetFieldInfoList(Result, FieldNames);
 end;
-function TMemTable.GetFieldDataSize(FieldInfo: TFieldInfo): Integer;
+function TMemTable.GetFieldBufferSize(FieldInfo: TFieldInfo): Integer;
 var
   Field: TField;
 begin
@@ -1951,12 +1925,12 @@ begin
   Field  := FieldInfo.Field;
 
   case Field.DataType of
-    ftString        : Result := (Field.Size + 1) * SizeOf(AnsiChar);
-    ftWideString    : Result := ((Field.Size + 1) * SizeOf(WideChar)) + SizeOf(LongWord);
-    ftGuid          : Result := (Field.Size + 1) * SizeOf(AnsiChar);
+    ftString        : Result := (Field.Size + 1) * Field.FieldDef.CharSize; // SizeOf(AnsiChar);
+    ftWideString    : Result := (Field.Size + 1) * Field.FieldDef.CharSize; // SizeOf(WideChar);
+    ftGuid          : Result := (Field.Size + 1) * Field.FieldDef.CharSize; // SizeOf(AnsiChar);
 
-    ftFixedChar     : Result := (Field.Size + 1) * SizeOf(AnsiChar);
-    ftFixedWideChar : Result := (Field.Size + 1) * SizeOf(WideChar);
+    ftFixedChar     : Result := (Field.Size + 1) * Field.FieldDef.CharSize; // SizeOf(AnsiChar);
+    ftFixedWideChar : Result := (Field.Size + 1) * Field.FieldDef.CharSize; // SizeOf(WideChar);
 
     ftAutoInc       : Result := SizeOf(Integer);
     ftSmallint      : Result := SizeOf(SmallInt);
@@ -1976,53 +1950,22 @@ begin
     ftDateTime      : Result := SizeOf(TDateTime);
     ftTimeStamp     : Result := SizeOf(TTimeStamp);
 
-    ftMemo          : Result := 0;
-    ftWideMemo      : Result := 0;
-    ftFmtMemo       : Result := 0;
+    ftMemo          : Result := SizeOf(TBlob);
+    ftWideMemo      : Result := SizeOf(TBlob);
+    ftFmtMemo       : Result := SizeOf(TBlob);
 
-    ftBlob          : Result := 0;
-    ftGraphic       : Result := 0;
+    ftBlob          : Result := SizeOf(TBlob);
+    ftGraphic       : Result := SizeOf(TBlob);
 
-    ftOraBlob       : Result := 0;
-    ftOraClob       : Result := 0;
+    ftOraBlob       : Result := SizeOf(TBlob);
+    ftOraClob       : Result := SizeOf(TBlob);
 
     ftVariant       : Result := SizeOf(PVariant);
   else
     raise Exception.Create('FieldType not supported');
   end;
 end;
-function TMemTable.GetFieldSize(FieldInfo: TFieldInfo): Integer;
-var
-  Field: TField;
-begin
-  Field  := FieldInfo.Field;
 
-  if IsBlobFieldType(Field.DataType) then
-    Result := SizeOf(TBlob)
-  else if (Field.DataType = ftWideString) then
-    Result := ((Field.Size + 1) * SizeOf(WideChar)) + SizeOf(LongWord)
-  else
-    Result := GetFieldDataSize(FieldInfo);
-end;
-function TMemTable.IsFieldBufferNull(Buf: PChar): Boolean;
-var
-  V : Byte;
-begin
-
-  if Assigned(Buf) then
-  begin
-    V := PByte(Buf)^;
-    Result := V = 0;
-  end else
-    Result := False;
-
-{
-if Assigned(Buf) then
-  Result := Byte(Buf[0]) <> 0
-else
-  Result := False;
-}
-end;
 function TMemTable.CreateBlobStream(Field: TField; Mode: TBlobStreamMode): TStream;
 var
   RecBuf: TRecordBuffer;
@@ -2160,7 +2103,6 @@ begin
 
   end;
 end;
-
 
 function TMemTable.GetBlobSize(RecBuf: PChar; FieldIndex: Integer): LongWord;
 begin
@@ -2414,9 +2356,12 @@ function TMemTable.CompareRecords(const Buf1, Buf2: PChar; const IndexFieldList:
 var
   Data1   : PChar;
   Data2   : PChar;
+  HasData1: Boolean;
+  HasData2: Boolean;
   i       : Integer;
   Field   : TField;
   Index   : Integer;
+
 begin
 
   Result := 0;
@@ -2434,10 +2379,11 @@ begin
         if Data2 <> nil then
         begin
 
-          if Boolean(Data1[0]) and Boolean(Data2[0]) then
+          HasData1 := not IsFieldBufferNull(Data1, FFieldBufferSizes[Index]);
+          HasData2 := not IsFieldBufferNull(Data2, FFieldBufferSizes[Index]);
+
+          if HasData1 and HasData2 then
           begin
-            Inc(Data1);
-            Inc(Data2);
             Result := CompareFields(Data1, Data2, Field.DataType, Options);
           end else if Boolean(Data1[0]) then
             Result := 1
@@ -2451,7 +2397,6 @@ begin
             -1 : if (BreakMode in [bmNE, bmL, bmLE]) then Break;
              1 : if (BreakMode in [bmNE, bmG, bmGE]) then Break;
           end;
-
 
         end;
       end;
@@ -2470,7 +2415,6 @@ begin
        Result := -Result;
   end;
 end;
-(*----------------------------------------------------------------------------*)
 procedure TMemTable.QuickSort(L, R: Integer; const RowList: TList; const IndexFieldList: TList; Options: TLocateOptions; SortMode: TMemTableSortMode);
 var
   I, J: Integer;
@@ -2610,47 +2554,56 @@ begin
     if not VarIsNull(Value) then
     begin
       Index   := Field.Index;
-      SetFieldValue(Index, RecBuf, Value);
+      SetValueToRecBuf(RecBuf, Index, Value);
     end;
 
   end;
 
 end;
-
-
-function TMemTable.IsFieldNull(const FieldIndex: Integer; RecBuf: TRecordBuffer): Boolean;
+function TMemTable.IsFieldBufferNull(FieldBuf: TFieldBuffer; Size: Integer): Boolean;
 var
-  FieldData : Pointer;
+  i : Integer;
 begin
-  FieldData  := RecBuf + FOffsets[FieldIndex];
-  Result := not Boolean(PChar(FieldData)[0]);
+  for i := 0 to Size - 1 do
+  begin
+    if PByte(FieldBuf)^ <> 0 then
+    begin
+      Result := False;
+      Exit;
+    end else begin
+      Inc(FieldBuf, 1);
+    end;
+  end;
+
+  Result := True;
+
 end;
 
-function TMemTable.GetFieldValue(const FieldIndex: Integer; RecBuf: TRecordBuffer): Variant;
+function TMemTable.GetValueFromRecBuf(RecBuf: TRecordBuffer; const FieldIndex: Integer): Variant;
 var
   FieldData : Pointer;
 begin
   FieldData  := RecBuf + FOffsets[FieldIndex];
 
   if Boolean(PChar(FieldData)[0]) then
-    Result := GetValue(FieldIndex, PChar(FieldData) + 1)
+    Result := GetValueFromFieldBuf(PChar(FieldData) + 1, FieldIndex)
   else
     Result := Null;
 end;
-procedure TMemTable.SetFieldValue(const FieldIndex: Integer; RecBuf: TRecordBuffer; const Value: Variant);
+procedure TMemTable.SetValueToRecBuf(RecBuf: TRecordBuffer; const FieldIndex: Integer; const Value: Variant);
 var
-  FieldData            : Pointer;
+  FieldBuf            : TFieldBuffer;
 begin
   if VarIsNull(Value) then
   begin
     SetFieldDataInternal(RecBuf, nil, FieldIndex);
   end else begin
-    FieldData     := AllocMem(FSizes[FieldIndex]);
+    FieldBuf     := AllocMem(FFieldBufferSizes[FieldIndex]);
     try
-      SetValue(FieldIndex, FieldData, Value);
-      SetFieldDataInternal(RecBuf, FieldData, FieldIndex);
+      SetValueToFieldBuf(FieldBuf, FieldIndex, Value);
+      SetFieldDataInternal(RecBuf, FieldBuf, FieldIndex);
     finally
-      FreeMem(FieldData);
+      FreeMem(FieldBuf);
     end;
   end;
 
@@ -2660,7 +2613,7 @@ end;
  This method does not perform any null flag check.
  The caller must be sure the field is not null.
  ----------------------------------------------------------------------------*)
-function TMemTable.GetValue(const FieldIndex: Integer; FieldData: Pointer ): Variant;
+function TMemTable.GetValueFromFieldBuf(FieldBuf: TFieldBuffer; const FieldIndex: Integer): Variant;
 var
   WS                : WideString;
   CY                : Currency;
@@ -2671,39 +2624,39 @@ begin
   case FFieldTypes[FieldIndex] of
     ftString         ,
     ftFixedChar      ,
-    ftGuid           : Result := String(PChar(FieldData));
+    ftGuid           : Result := String(PChar(FieldBuf));
 
     ftWideString     ,
     ftFixedWideChar  : begin
-                         SetString(WS, PWideChar(PChar(FieldData) + SizeOf(LongWord)), LongWord(FieldData^) div SizeOf(WideChar));
+                         SetString(WS, PWideChar(PChar(FieldBuf) + SizeOf(LongWord)), LongWord(FieldBuf^) div SizeOf(WideChar));
                          Result := WS;
                        end;
 
-    ftSmallint       : Result := SmallInt(FieldData^);
+    ftSmallint       : Result := SmallInt(FieldBuf^);
 
     ftAutoInc        ,
-    ftInteger        : Result := Longint(FieldData^);
+    ftInteger        : Result := Longint(FieldBuf^);
 
-    ftLargeint       : Result := Int64(FieldData^);
-    ftWord           : Result := Word(FieldData^);
+    ftLargeint       : Result := Int64(FieldBuf^);
+    ftWord           : Result := Word(FieldBuf^);
 
-    ftBoolean        : Result := WordBool(FieldData^);
+    ftBoolean        : Result := WordBool(FieldBuf^);
 
     ftFloat          ,
-    ftCurrency       : Result := Double(FieldData^);
+    ftCurrency       : Result := Double(FieldBuf^);
 
     ftBCD            ,
     ftFMTBcd         : begin
                          CY := 0;
-                         if BCDToCurr(PBcd(FieldData)^, CY) then
+                         if BCDToCurr(PBcd(FieldBuf)^, CY) then
                            Result := CY;
                        end;
 
     ftDate           ,
     ftTime           ,
-    ftDateTime       : Result  := NativeToDateTime(FFieldTypes[FieldIndex], TDateTimeRec(FieldData^));
+    ftDateTime       : Result  := NativeToDateTime(FFieldTypes[FieldIndex], TDateTimeRec(FieldBuf^));
 
-    ftTimeStamp      : Result  := TimeStampToMSecs(TTimeStamp(FieldData^)); // VarSQLTimeStampCreate(TSQLTimeStamp(FieldData^));
+    ftTimeStamp      : Result  := TimeStampToMSecs(TTimeStamp(FieldBuf^)); // VarSQLTimeStampCreate(TSQLTimeStamp(FieldData^));
 
     ftMemo           : ;
     ftWideMemo       : ;
@@ -2724,7 +2677,7 @@ end;
  This method does set any null flag byte.
  The caller is responsible for setting that flag, IF FieldData comes from a record buffer.
  ----------------------------------------------------------------------------*)
-procedure TMemTable.SetValue(const FieldIndex: Integer; FieldData: Pointer; Value: Variant);
+procedure TMemTable.SetValueToFieldBuf(FieldBuf: TFieldBuffer; const FieldIndex: Integer; Value: Variant);
 var
   Data : TVarData;
 
@@ -2741,34 +2694,34 @@ begin
     ftString                 ,
     ftFixedChar              ,
     ftGuid                   : if not VarIsNull(Value) then
-                                 StrCopy(PChar(FieldData), PChar(String(Value)));
+                                 StrCopy(PChar(FieldBuf), PChar(String(Value)));
 
     ftFixedWideChar          ,
     ftWideString             : if not VarIsNull(Value) then
-                                 WideToBuffer(Value, FieldData);
+                                 WideToBuffer(Value, FieldBuf);
 
     ftSmallint               : if Data.VType = varByte then
-                                 SmallInt(FieldData^) := Byte(Value)
+                                 SmallInt(FieldBuf^) := Byte(Value)
                                else
-                                 SmallInt(FieldData^) := SmallInt(Value) ;
+                                 SmallInt(FieldBuf^) := SmallInt(Value) ;
 
     ftAutoInc                ,
-    ftInteger                : Integer(FieldData^) := Integer(Value) ;
+    ftInteger                : Integer(FieldBuf^) := Integer(Value) ;
 
-    ftLargeint               : Int64(FieldData^) := Int64(Value) ;
+    ftLargeint               : Int64(FieldBuf^) := Int64(Value) ;
 
     ftWord                   : if Data.VType = varByte then
-                                 Word(FieldData^) := Byte(Value)
+                                 Word(FieldBuf^) := Byte(Value)
                                else
-                                 Word(FieldData^) := Word(Value) ;
+                                 Word(FieldBuf^) := Word(Value) ;
 
-    ftBoolean                : WordBool(FieldData^) := WordBool(Value);
+    ftBoolean                : WordBool(FieldBuf^) := WordBool(Value);
 
     ftFloat                  ,
     ftCurrency               : if Data.VType = varDouble then
-                                 Double(FieldData^) := Double(Value)
+                                 Double(FieldBuf^) := Double(Value)
                                else
-                                 Double(FieldData^) := Value;
+                                 Double(FieldBuf^) := Value;
 
     ftFMTBcd                 ,
     ftBCD                    : begin
@@ -2776,7 +2729,7 @@ begin
                                  BDC.SignSpecialPlaces := 0;
                                  CurrToBCD(Value, BDC, 32, Fields[FieldIndex].Size);
                                  P := @BDC;
-                                 Move(P^, FieldData^, FSizes[FieldIndex]);
+                                 Move(P^, FieldBuf^, FFieldBufferSizes[FieldIndex]);
                                end;
 
     ftDate                   ,
@@ -2784,7 +2737,7 @@ begin
     ftDateTime               : begin
                                  DTR := DateTimeToNative(FFieldTypes[FieldIndex], VarToDateTime(Value));
                                  P   := @DTR;
-                                 Move(P^, FieldData^, FSizes[FieldIndex]);
+                                 Move(P^, FieldBuf^, FFieldBufferSizes[FieldIndex]);
                                end;
 
     ftTimeStamp              : begin
@@ -2796,11 +2749,11 @@ begin
                                  }
                                  DT  := VarToDateTime(Value); //VarToSQLTimeStamp(VarToDateTime(Value));
                                  P   := @DT;
-                                 Move(P^, FieldData^, FSizes[FieldIndex]);
+                                 Move(P^, FieldBuf^, FFieldBufferSizes[FieldIndex]);
                                  Value := Null;
                                end;
 
-    ftVariant                : Variant(FieldData^) := Value;
+    ftVariant                : Variant(FieldBuf^) := Value;
   else
     raise Exception.CreateFmt('Unsupported field type (%s) in field %s', [FieldTypeNames[FFieldTypes[FieldIndex]], Fields[FieldIndex].DisplayLabel]);
   end;
@@ -2988,10 +2941,10 @@ begin
           if not TField(MasterFields[i]).IsNull then
           begin
             FieldIndex   := TFieldInfo(FDetailFields[i]).Field.Index;
-            Buf          := AllocMem(FSizes[FieldIndex]);
+            Buf          := AllocMem(FFieldBufferSizes[FieldIndex]);
             try
-              TField(MasterFields[i]).GetData(Buf);
-              SetFieldDataInternal(FKeyBuffers[biMaster], Buf, FieldIndex);
+              TField(MasterFields[i]).GetData(Buf);                             // get the master field buffer
+              SetFieldDataInternal(FKeyBuffers[biMaster], Buf, FieldIndex);     // put the master field buffer if FKeyBuffers
             finally
               FreeMem(Buf);
             end;
@@ -3014,26 +2967,6 @@ end;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-(*----------------------------------------------------------------------------*)
 class function TMemTable.DateTimeToNative(DataType: TFieldType; Data: TDateTime): TDateTimeRec;
 var
   TimeStamp: TTimeStamp;
@@ -3046,7 +2979,7 @@ begin
     Result.DateTime := TimeStampToMSecs(TimeStamp);
   end;
 end;
-(*----------------------------------------------------------------------------*)
+
 class function TMemTable.NativeToDateTime(DataType: TFieldType; Data: TDateTimeRec): TDateTime;
 var
   TimeStamp: TTimeStamp;
@@ -3072,12 +3005,12 @@ begin
   end;
   Result := TimeStampToDateTime(TimeStamp);
 end;
-(*----------------------------------------------------------------------------*)
+
 class function TMemTable.CompareDateTimes(const A, B: TDateTime): Integer;
 begin
   Result := CompareDateTime(A, B);
 end;
-(*----------------------------------------------------------------------------*)
+
 class function TMemTable.BufferToWide(Buffer: Pointer): WideString;
 var
   Len  : LongWord;
@@ -3090,7 +3023,7 @@ begin
     Move(Pointer(PChar(Buffer) + SizeOf(LongWord))^, Pointer(Result)^, Len);
   end;
 end;
-(*----------------------------------------------------------------------------*)
+
 class procedure TMemTable.WideToBuffer(WS: WideString; Buffer: Pointer);
 var
   Len : LongWord;
@@ -3105,7 +3038,7 @@ begin
   end;
 {$WARNINGS ON}
 end;
-(*----------------------------------------------------------------------------*)
+
 class procedure TMemTable.GetFloatFormatAndDigits(CurrencyFormat: Boolean; var FloatFormat: TFloatFormat; var Digits: Integer);
 begin
   if CurrencyFormat then
@@ -3128,12 +3061,12 @@ begin
     List.Delete(List.Count - 1);
   end;
 end;
-(*--------------------------------------------------------------------------------*)
+
 class function  TMemTable.Min(const A, B: Integer): Integer;
 begin
   if A < B then Result := A else Result := B;
 end;
-(*--------------------------------------------------------------------------------*)
+
 class function  TMemTable.Max(const A, B: Integer): Integer;
 begin
   if A > B then Result := A else Result := B;
