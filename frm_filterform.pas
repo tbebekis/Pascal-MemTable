@@ -80,7 +80,7 @@ begin
   begin
     Table.Append();
     Table.FieldByName('Name').AsString := Names[Random(Length(Names) - 1)];          // range 0..6
-    Table.FieldByName('Country').AsString := Names[Random(Length(Countries) - 1)];
+    Table.FieldByName('Country').AsString := Countries[Random(Length(Countries) - 1)];
     Table.FieldByName('Amount').AsFloat := (Random(99999) + 1) * 1.5;
     Table.FieldByName('Date').AsDateTime := SysUtils.Date() + Random(7);
     Table.Post();
@@ -88,16 +88,30 @@ begin
 
   btnApplyFilter.OnClick := @AnyClick;
   btnCancelFilter.OnClick := @AnyClick;
+
+  edtFilter.Text := 'Name = ' + QuotedStr('Teo');
+  btnCancelFilter.Enabled := False;
 end;
 
 procedure TFilterForm.AnyClick(Sender: TObject);
 begin
   if (btnApplyFilter = Sender) then
   begin
+    if Length(edtFilter.Text) > 0 then
+    begin
+      Table.Filtered := False;
+      Table.Filter := edtFilter.Text;
+      Table.Filtered := True;
 
+      btnApplyFilter.Enabled := False;
+      btnCancelFilter.Enabled := True;
+    end;
   end else if (btnCancelFilter = Sender) then
   begin
+    Table.Filtered := False;
 
+    btnApplyFilter.Enabled := True;
+    btnCancelFilter.Enabled := False;
   end;
 
 end;
