@@ -192,7 +192,7 @@ type
     FKeyBuffers                : array[TKeyBufferIndex] of PChar;
 
     FFilterParser              : TFilterParser;
-    FFilterData                : TRecordBuffer;
+    FFilterBuffer              : TRecordBuffer;
     FEmptyBlob                 : TBlob;
 
     FMasterLink                : TMasterDataLink;
@@ -603,9 +603,6 @@ end;
 destructor TMemTable.Destroy;
 begin
   inherited Destroy;
-
-  if Assigned(FFilterData) then
-    FreeMem(FFilterData);
 
   FreeAndNil(FFilterParser);
 
@@ -1070,8 +1067,8 @@ begin
 
       if Assigned(FFilterParser) then
         FreeAndNil(FFilterParser);
-      if Assigned(FFilterData) then
-         FreeMem(FFilterData);
+      if Assigned(FFilterBuffer) then
+         FFilterBuffer := nil;
     end
     else if Assigned(OnFilterRecord) or (Filtered and (Length(Filter) > 0)) then
     begin
@@ -1480,6 +1477,7 @@ begin
   begin
     if Field.ReadOnly and not (State in [dsSetKey, dsFilter]) then
       DatabaseErrorFmt(SReadOnlyField, [Field.DisplayName], Self);
+
     Field.Validate(Buffer);
 
     if FModifiedFields.IndexOf(Field) = -1 then
@@ -1634,7 +1632,8 @@ function TMemTable.CanDisplayRecord(RecBuf: TRecordBuffer): Boolean;
 var
   RRS, RRE : Integer; // Range Results
   TempStatusOptions : TUpdateStatusSet;
-  Accept : Boolean;
+  //Accept : Boolean;
+  //SavedState : TDataSetState;
 begin
 
   Result := (FModes * [cmStatus, cmLink, cmRange, cmFilter] = []);
@@ -1675,6 +1674,11 @@ begin
     { TODO: filter }
     if (cmFilter in FModes) then
     begin
+      {
+      SavedState    := SetTempState(dsFilter);
+
+      FFilterBuffer := AllocRecordBuffer();
+      CopyRecord(RecBuf, FFilterBuffer);
 
       if Assigned(OnFilterRecord) then
       begin
@@ -1686,14 +1690,18 @@ begin
 
       if Assigned(FFilterParser) and (Length(Filter) > 0) then
       begin
-        //Boolean((FFilterParser.ExtractFromBuffer(RecBuf))^);
         if not FFilterParser.FilterRecord(RecBuf) then
            Exit; //==>
       end;
 
+      RestoreState(SavedState);
+      FreeRecordBuffer(FFilterBuffer);
+      FFilterBuffer := nil;
+      }
+
       {
-      if Assigned(FFilterData) then
-        if not FFilterParser.FilterRecord(RecBuf, FFilterData, FilterParser_OnExtractFieldValue) then
+      if Assigned(FFilterBuffer) then
+        if not FFilterParser.FilterRecord(RecBuf, FFilterBuffer, FilterParser_OnExtractFieldValue) then
           Exit; //==>
       }
     end;
@@ -1715,7 +1723,7 @@ begin
 
     dsCalcFields   ,
     dsInternalCalc : RecBuf := CalcBuffer;
-    //dsFilter       : RecBuf := FFilterBuffer;     // TODO:  dsFilter
+    dsFilter       : RecBuf := FFilterBuffer;     // TODO:  dsFilter
 
     dsNewValue     ,
     dsOldValue     ,
@@ -2219,6 +2227,7 @@ begin
       CurRecIndex := Index
     else
       First();
+
   end;
 
 end;

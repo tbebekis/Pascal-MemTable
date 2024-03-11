@@ -144,7 +144,7 @@ type
   end;
 
   TDateTimeFieldVar = class(TFieldVar)
-  private
+  protected
     FFieldVal: TDateTime;
     function GetFieldType: TExpressionType; override;
   protected
@@ -154,7 +154,7 @@ type
   end;
 
   TBooleanFieldVar = class(TFieldVar)
-  private
+  protected
     FFieldVal: wordbool;
     function GetFieldType: TExpressionType; override;
   protected
