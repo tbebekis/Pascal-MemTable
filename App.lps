@@ -10,7 +10,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="3"/>
         <CursorPos Y="20"/>
-        <UsageCount Value="123"/>
+        <UsageCount Value="135"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -23,7 +23,7 @@
         <EditorIndex Value="1"/>
         <TopLine Value="93"/>
         <CursorPos X="12" Y="124"/>
-        <UsageCount Value="123"/>
+        <UsageCount Value="135"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -35,7 +35,7 @@
         <TopLine Value="1150"/>
         <CursorPos X="34" Y="1153"/>
         <FoldState Value=" TMI23 p0-O82 TKc0e]D/V63011 p5,1054 PHrK0 TCigD41 TL\N62]d)7X5 T7k5GB[k4PDp6G T3rV0445B pkBoc03213 pj7kS04581 pl2of0a319]Xbme0c6 pibjf0K5]e8jb67419]BLkE]!251322 pnUtH034]iZj60R145221517 plftH631R"/>
-        <UsageCount Value="123"/>
+        <UsageCount Value="135"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -47,7 +47,7 @@
         <UnitName Value="frm_SsimpleForm"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="14" Y="3"/>
-        <UsageCount Value="123"/>
+        <UsageCount Value="135"/>
       </Unit>
       <Unit>
         <Filename Value="o_app.pas"/>
@@ -55,7 +55,7 @@
         <UnitName Value="o_App"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="57" Y="15"/>
-        <UsageCount Value="122"/>
+        <UsageCount Value="134"/>
       </Unit>
       <Unit>
         <Filename Value="frm_masterdetailform.pas"/>
@@ -64,9 +64,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_MasterDetailForm"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos X="54" Y="10"/>
-        <UsageCount Value="122"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="8"/>
+        <TopLine Value="73"/>
+        <CursorPos X="39" Y="108"/>
+        <UsageCount Value="134"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="frm_sortform.pas"/>
@@ -78,7 +82,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="42"/>
         <CursorPos X="57" Y="53"/>
-        <UsageCount Value="121"/>
+        <UsageCount Value="133"/>
       </Unit>
       <Unit>
         <Filename Value="frm_statusfilterform.pas"/>
@@ -90,7 +94,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="9"/>
         <CursorPos X="34" Y="131"/>
-        <UsageCount Value="115"/>
+        <UsageCount Value="127"/>
       </Unit>
       <Unit>
         <Filename Value="frm_rangeform.pas"/>
@@ -102,7 +106,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="92"/>
         <CursorPos X="78" Y="101"/>
-        <UsageCount Value="113"/>
+        <UsageCount Value="125"/>
       </Unit>
       <Unit>
         <Filename Value="frm_locatelookupform.pas"/>
@@ -112,7 +116,7 @@
         <UnitName Value="frm_LocateLookupForm"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="42" Y="6"/>
-        <UsageCount Value="113"/>
+        <UsageCount Value="125"/>
       </Unit>
       <Unit>
         <Filename Value="frm_blobform.pas"/>
@@ -123,7 +127,7 @@
         <UnitName Value="frm_BlobForm"/>
         <EditorIndex Value="-1"/>
         <CursorPos Y="13"/>
-        <UsageCount Value="108"/>
+        <UsageCount Value="120"/>
       </Unit>
       <Unit>
         <Filename Value="o_filterparser.pas"/>
@@ -132,7 +136,7 @@
         <EditorIndex Value="6"/>
         <TopLine Value="285"/>
         <CursorPos X="16" Y="320"/>
-        <UsageCount Value="80"/>
+        <UsageCount Value="92"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -142,11 +146,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_FilterForm"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="7"/>
-        <TopLine Value="61"/>
-        <CursorPos X="56" Y="75"/>
-        <UsageCount Value="51"/>
+        <TopLine Value="99"/>
+        <CursorPos X="52" Y="110"/>
+        <UsageCount Value="63"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -156,20 +159,13 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="931"/>
         <CursorPos X="40" Y="939"/>
-        <UsageCount Value="1"/>
+        <UsageCount Value="0"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\lcl\include\application.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="2216"/>
         <CursorPos X="53" Y="2234"/>
-        <UsageCount Value="1"/>
-      </Unit>
-      <Unit>
-        <Filename Value="G:\My Drive\Dev\Lazarus\MemTable2\o_memtable.pas"/>
-        <UnitName Value="o_MemTable"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="15"/>
         <UsageCount Value="0"/>
       </Unit>
       <Unit>
@@ -181,15 +177,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="59"/>
         <CursorPos X="52" Y="65"/>
-        <UsageCount Value="5"/>
-      </Unit>
-      <Unit>
-        <Filename Value="C:\lazarus\lcl\dbgrids.pas"/>
-        <UnitName Value="DBGrids"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="273"/>
-        <CursorPos X="23" Y="274"/>
-        <UsageCount Value="0"/>
+        <UsageCount Value="4"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\db.pas"/>
@@ -197,7 +185,7 @@
         <EditorIndex Value="4"/>
         <TopLine Value="1374"/>
         <CursorPos X="16" Y="1391"/>
-        <UsageCount Value="59"/>
+        <UsageCount Value="65"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -206,7 +194,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="865"/>
         <CursorPos X="10" Y="879"/>
-        <UsageCount Value="1"/>
+        <UsageCount Value="0"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\bufdataset.pas"/>
@@ -214,13 +202,13 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="2645"/>
         <CursorPos X="3" Y="2652"/>
-        <UsageCount Value="47"/>
+        <UsageCount Value="46"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\win\sysutils.pp"/>
         <UnitName Value="SysUtils"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="1"/>
+        <UsageCount Value="0"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\lcl\dbctrls.pp"/>
@@ -228,7 +216,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="1184"/>
         <CursorPos X="25" Y="1196"/>
-        <UsageCount Value="3"/>
+        <UsageCount Value="2"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\lcl\extctrls.pp"/>
@@ -236,21 +224,21 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="550"/>
         <CursorPos X="14" Y="563"/>
-        <UsageCount Value="3"/>
+        <UsageCount Value="2"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\lcl\include\customimage.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="294"/>
         <CursorPos X="3" Y="15"/>
-        <UsageCount Value="3"/>
+        <UsageCount Value="2"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\lcl\include\dbimage.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="212"/>
         <CursorPos X="3" Y="166"/>
-        <UsageCount Value="3"/>
+        <UsageCount Value="2"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\lcl\controls.pp"/>
@@ -258,7 +246,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="2417"/>
         <CursorPos X="3" Y="2435"/>
-        <UsageCount Value="3"/>
+        <UsageCount Value="2"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\lcl\graphics.pp"/>
@@ -266,7 +254,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="924"/>
         <CursorPos X="3" Y="883"/>
-        <UsageCount Value="3"/>
+        <UsageCount Value="2"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\lcl\dialogs.pp"/>
@@ -274,14 +262,14 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="167"/>
         <CursorPos X="20" Y="175"/>
-        <UsageCount Value="2"/>
+        <UsageCount Value="1"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\dataset.inc"/>
         <EditorIndex Value="5"/>
         <TopLine Value="839"/>
         <CursorPos X="71" Y="855"/>
-        <UsageCount Value="48"/>
+        <UsageCount Value="54"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -289,47 +277,47 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="26"/>
         <CursorPos X="42" Y="33"/>
-        <UsageCount Value="47"/>
+        <UsageCount Value="46"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\dbase\dbf_prsdef.pas"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="3" Y="18"/>
-        <UsageCount Value="47"/>
+        <UsageCount Value="46"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\objpas\objpas.pp"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="8"/>
         <CursorPos X="45" Y="12"/>
-        <UsageCount Value="4"/>
+        <UsageCount Value="3"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\dbase\dbf_prscore.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="569"/>
         <CursorPos X="45" Y="578"/>
-        <UsageCount Value="47"/>
+        <UsageCount Value="46"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\objpas\sysutils\sysutilh.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="312"/>
         <CursorPos X="13" Y="330"/>
-        <UsageCount Value="4"/>
+        <UsageCount Value="3"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\objpas\sysutils\sysutils.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="154"/>
         <CursorPos X="9" Y="158"/>
-        <UsageCount Value="4"/>
+        <UsageCount Value="3"/>
       </Unit>
       <Unit>
         <Filename Value="G:\My Drive\Dev\Lazarus\MemTable_Miscs\tpk_DB.pas"/>
         <TopLine Value="3268"/>
         <CursorPos X="30" Y="3277"/>
-        <UsageCount Value="49"/>
+        <UsageCount Value="55"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -338,140 +326,109 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="19"/>
         <CursorPos X="3" Y="38"/>
-        <UsageCount Value="27"/>
+        <UsageCount Value="26"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\objpas\classes\classesh.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="833"/>
         <CursorPos X="18" Y="857"/>
-        <UsageCount Value="2"/>
+        <UsageCount Value="1"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\objpas\classes\stringl.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="1966"/>
         <CursorPos X="3" Y="1969"/>
-        <UsageCount Value="2"/>
+        <UsageCount Value="1"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\objpas\sysutils\sysstrh.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="36"/>
         <CursorPos X="3" Y="56"/>
-        <UsageCount Value="3"/>
+        <UsageCount Value="2"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\fields.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="662"/>
         <CursorPos X="3" Y="665"/>
-        <UsageCount Value="42"/>
+        <UsageCount Value="41"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\inc\heaph.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="80"/>
         <CursorPos X="50" Y="94"/>
-        <UsageCount Value="3"/>
+        <UsageCount Value="2"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\inc\heap.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="342"/>
         <CursorPos X="9" Y="344"/>
-        <UsageCount Value="3"/>
+        <UsageCount Value="2"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\dbase\dbf.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="2322"/>
         <CursorPos X="29" Y="2337"/>
-        <UsageCount Value="41"/>
+        <UsageCount Value="40"/>
       </Unit>
       <Unit>
         <Filename Value="G:\My Drive\Dev\Lazarus\MemTable_Miscs\tpk_Utls.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="14838"/>
         <CursorPos Y="14870"/>
-        <UsageCount Value="35"/>
+        <UsageCount Value="34"/>
       </Unit>
       <Unit>
         <Filename Value="F:\SSD-0\_Dev\Delphi\Lib\Tripous\Lib\HEAD\tco_RTTInfo.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="722"/>
-        <UsageCount Value="18"/>
+        <UsageCount Value="17"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\dbase\dbf_prssupp.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="8"/>
         <CursorPos X="41" Y="18"/>
-        <UsageCount Value="35"/>
+        <UsageCount Value="34"/>
       </Unit>
       <Unit>
         <Filename Value="G:\My Drive\Dev\Lazarus\MemTable_Miscs\DDG_DS.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="261"/>
         <CursorPos X="26" Y="265"/>
-        <UsageCount Value="21"/>
+        <UsageCount Value="20"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\rtl\inc\systemh.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="420"/>
         <CursorPos X="38" Y="435"/>
-        <UsageCount Value="21"/>
+        <UsageCount Value="20"/>
       </Unit>
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\dbase\dbf_parser.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="442"/>
         <CursorPos X="37" Y="446"/>
+        <UsageCount Value="9"/>
+      </Unit>
+      <Unit>
+        <Filename Value="C:\lazarus\lcl\stdctrls.pp"/>
+        <UnitName Value="StdCtrls"/>
+        <EditorIndex Value="9"/>
+        <TopLine Value="1171"/>
+        <CursorPos X="14" Y="1192"/>
         <UsageCount Value="10"/>
+        <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="2271" Column="12" TopLine="2250"/>
-      </Position>
-      <Position>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\db.pas"/>
-        <Caret Line="1571" Column="60" TopLine="1561"/>
-      </Position>
-      <Position>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\db.pas"/>
-        <Caret Line="1736" Column="42" TopLine="1711"/>
-      </Position>
-      <Position>
-        <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\fcl-db\src\base\db.pas"/>
-        <Caret Line="1570" Column="15" TopLine="1555"/>
-      </Position>
-      <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="403" Column="41" TopLine="393"/>
-      </Position>
-      <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="376" Column="21" TopLine="361"/>
-      </Position>
-      <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="2084" Column="61" TopLine="188"/>
-      </Position>
-      <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="40" Column="26" TopLine="19"/>
-      </Position>
-      <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="583" Column="3" TopLine="578"/>
-      </Position>
-      <Position>
-        <Filename Value="o_memtable.pas"/>
-        <Caret Line="305" Column="98" TopLine="334"/>
-      </Position>
       <Position>
         <Filename Value="o_memtable.pas"/>
         <Caret Line="1091" Column="3" TopLine="1068"/>
@@ -551,6 +508,46 @@
       <Position>
         <Filename Value="frm_filterform.pas"/>
         <Caret Line="53" Column="26" TopLine="47"/>
+      </Position>
+      <Position>
+        <Filename Value="frm_filterform.pas"/>
+        <Caret Line="108" Column="18" TopLine="89"/>
+      </Position>
+      <Position>
+        <Filename Value="frm_masterdetailform.pas"/>
+        <Caret Line="15" Column="63"/>
+      </Position>
+      <Position>
+        <Filename Value="frm_masterdetailform.pas"/>
+        <Caret Line="16" Column="55"/>
+      </Position>
+      <Position>
+        <Filename Value="frm_masterdetailform.pas"/>
+        <Caret Line="17" Column="56"/>
+      </Position>
+      <Position>
+        <Filename Value="frm_masterdetailform.pas"/>
+        <Caret Line="14" Column="70"/>
+      </Position>
+      <Position>
+        <Filename Value="frm_masterdetailform.pas"/>
+        <Caret Line="19" Column="61"/>
+      </Position>
+      <Position>
+        <Filename Value="frm_masterdetailform.pas"/>
+        <Caret Line="125" Column="28" TopLine="100"/>
+      </Position>
+      <Position>
+        <Filename Value="C:\lazarus\lcl\stdctrls.pp"/>
+        <Caret Line="1404" Column="30" TopLine="1385"/>
+      </Position>
+      <Position>
+        <Filename Value="C:\lazarus\lcl\stdctrls.pp"/>
+        <Caret Line="1362" Column="14" TopLine="1341"/>
+      </Position>
+      <Position>
+        <Filename Value="frm_masterdetailform.pas"/>
+        <Caret Line="43" Column="41" TopLine="22"/>
       </Position>
     </JumpHistory>
     <RunParams>

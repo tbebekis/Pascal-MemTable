@@ -105,7 +105,7 @@ begin
   App.AdjustGridColumns(Grid);
 
   Randomize();
-  for i := 0 to Length(Names) - 1 do
+  for i := 0 to 50 do
   begin
     Table.Append();
     Table.FieldByName('Name').AsString := Names[Random(Length(Names) - 1)];          // range 0..6
@@ -120,7 +120,9 @@ begin
   btnUseFilterEvent.OnClick := @AnyClick;
   btnCancelFilterEvent.OnClick := @AnyClick;
 
-  edtFilter.Text := 'Name = ' + QuotedStr('Teo');
+  Table.MoveBy(3);
+  edtFilter.Text := 'Name = ' + QuotedStr(Table.FieldByName('Name').AsString);
+  Table.First;
 
   FilterState := fsNone;
 end;
@@ -132,20 +134,21 @@ begin
   begin
     if Length(edtFilter.Text) > 0 then
     begin
+      FilterState := fsFilter;
+
       Table.Filtered := False;
       Table.Filter := edtFilter.Text;
       Table.Filtered := True;
-
-      FilterState := fsFilter;
     end;
   end else if (btnCancelFilter = Sender) then
   begin
-    Table.Filtered := False;
-
     FilterState := fsNone;
+    Table.Filtered := False;
   end else if (btnUseFilterEvent = Sender) then
   begin
     FilterState := fsEvent;
+
+    Table.Filter := '';
 
     if not TryStrToFloat(edtAmount.Text, FAmount) then
        FAmount := 50000;
@@ -155,11 +158,10 @@ begin
   end else if (btnCancelFilterEvent = Sender) then
   begin
     FilterState := fsNone;
+
     Table.OnFilterRecord := nil;
     Table.Filtered := False;
   end;
-
-
 
 end;
 

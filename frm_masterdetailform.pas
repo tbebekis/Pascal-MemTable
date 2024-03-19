@@ -14,7 +14,7 @@ uses
   , Dialogs
   , DB
   , DBCtrls
-  , DBGrids
+  , DBGrids, StdCtrls
 
   ,O_App
   ,o_MemTable
@@ -25,8 +25,11 @@ type
   { TMasterDetailForm }
 
   TMasterDetailForm = class(TForm)
+    chIsLinkActive: TCheckBox;
     gridDetail: TDBGrid;
     gridMaster: TDBGrid;
+    Panel1: TPanel;
+    Panel2: TPanel;
     Splitter1: TSplitter;
   private
     tblMaster : TMemTable;
@@ -36,6 +39,8 @@ type
     procedure InitializeTest();
     procedure CreateMasterTable();
     procedure CreateDetailTable();
+
+    procedure AnyClick(Sender: TObject);
   protected
     procedure KeyPress(var Key: char); override;
     procedure DoShow; override;
@@ -92,6 +97,18 @@ begin
 
   App.AdjustGridColumns(gridDetail);
 end;
+
+procedure TMasterDetailForm.AnyClick(Sender: TObject);
+begin
+   if Sender = chIsLinkActive then
+   begin
+     if chIsLinkActive.Checked then
+         tblDetail.MasterSource := dsMaster
+     else
+        tblDetail.MasterSource := nil;
+   end;
+end;
+
 procedure TMasterDetailForm.InitializeTest();
 const
   MasterRowCount = 3;
@@ -117,6 +134,9 @@ begin
       tblDetail.FieldByName('Name').AsString := 'Name_'  + IntToStr(i + 1) + '_' + IntToStr(j + 1);
       tblDetail.Post();
     end;
+
+
+  chIsLinkActive.OnChange := @AnyClick;
 end;
 
 procedure TMasterDetailForm.KeyPress(var Key: char);
