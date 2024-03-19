@@ -24,21 +24,39 @@ uses
   ;
 
 type
+  TFilterState = (fsNone, fsFilter, fsEvent);
+  TFilterStates = set of TFilterState;
+
+type
 
   { TFilterForm }
 
   TFilterForm = class(TForm)
     btnApplyFilter: TButton;
+    btnUseFilterEvent: TButton;
+    btnCancelFilterEvent: TButton;
     btnCancelFilter: TButton;
+    edtAmount: TEdit;
     edtFilter: TEdit;
     Grid: TDBGrid;
     Label1: TLabel;
+    Label2: TLabel;
     Panel1: TPanel;
+  private
+    FFilterState: TFilterState;
+    procedure SetFilterState(Value: TFilterState);
   private
     DS: TDatasource;
     Table: TMemTable;
+    FAmount : Double;
+
     procedure InitializeTest();
     procedure AnyClick(Sender: TObject);
+
+    procedure OnFilterRecord(DataSet: TDataSet; var Accept: Boolean);
+
+    property FilterState : TFilterState read FFilterState write SetFilterState;
+
   protected
     procedure KeyPress(var Key: char); override;
     procedure DoShow; override;
@@ -50,6 +68,17 @@ implementation
 
 {$R *.lfm}
 
+
+
+procedure TFilterForm.SetFilterState(Value: TFilterState);
+begin
+  FFilterState := Value;
+
+  btnApplyFilter.Enabled       := FFilterState in [fsNone];
+  btnCancelFilter.Enabled      := FFilterState in [fsFilter];
+  btnUseFilterEvent.Enabled    := FFilterState in [fsNone];
+  btnCancelFilterEvent.Enabled := FFilterState in [fsEvent];
+end;
 
 procedure TFilterForm.InitializeTest();
 const
@@ -88,12 +117,16 @@ begin
 
   btnApplyFilter.OnClick := @AnyClick;
   btnCancelFilter.OnClick := @AnyClick;
+  btnUseFilterEvent.OnClick := @AnyClick;
+  btnCancelFilterEvent.OnClick := @AnyClick;
 
   edtFilter.Text := 'Name = ' + QuotedStr('Teo');
-  btnCancelFilter.Enabled := False;
+
+  FilterState := fsNone;
 end;
 
 procedure TFilterForm.AnyClick(Sender: TObject);
+
 begin
   if (btnApplyFilter = Sender) then
   begin
@@ -103,18 +136,38 @@ begin
       Table.Filter := edtFilter.Text;
       Table.Filtered := True;
 
-      btnApplyFilter.Enabled := False;
-      btnCancelFilter.Enabled := True;
+      FilterState := fsFilter;
     end;
   end else if (btnCancelFilter = Sender) then
   begin
     Table.Filtered := False;
 
-    btnApplyFilter.Enabled := True;
-    btnCancelFilter.Enabled := False;
+    FilterState := fsNone;
+  end else if (btnUseFilterEvent = Sender) then
+  begin
+    FilterState := fsEvent;
+
+    if not TryStrToFloat(edtAmount.Text, FAmount) then
+       FAmount := 50000;
+
+    Table.OnFilterRecord := @OnFilterRecord;
+    Table.Filtered := True;
+  end else if (btnCancelFilterEvent = Sender) then
+  begin
+    FilterState := fsNone;
+    Table.OnFilterRecord := nil;
+    Table.Filtered := False;
   end;
 
+
+
 end;
+
+procedure TFilterForm.OnFilterRecord(DataSet: TDataSet; var Accept: Boolean);
+begin
+  Accept := DataSet.FieldByName('Amount').AsFloat >= FAmount;
+end;
+
 
 procedure TFilterForm.KeyPress(var Key: char);
 begin

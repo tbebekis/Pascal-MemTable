@@ -33,7 +33,6 @@ uses
 
 
 
-
 type
   TMemTableSortMode  = (smNone, smAsc, smDesc);
 
@@ -148,7 +147,6 @@ type
 
 
 type
-
   { TMemTable }
   TMemTable = class(TDataSet)
   private
@@ -201,11 +199,13 @@ type
     FIsInRange                 : Boolean;
     FRangeExclusive            : Boolean;
     FInitialized               : Boolean;
+    FIsFilterActive            : Boolean;
 
     function  GetMasterDataSource: TDataSource;
     function  GetMasterFieldNames: string;
     function  GetStatusFilter: TUpdateStatusSet;
     procedure SetDetailFieldNames(Value: string);
+    procedure SetIsFilterActive(Value: Boolean);
     procedure SetSortMode(Value: TMemTableSortMode);
     procedure SetSortOnFieldNames(Value: string);
     procedure SetMasterDataSource(Value: TDataSource);
@@ -295,6 +295,8 @@ type
     { miscs }
     procedure LoadIndexFieldList();
     procedure VariantValuesToRecordBuffer(FieldList: TList; RecBuf: PChar; Values: Variant);
+
+    procedure OnFilterVariableValueEvent(Sender: TObject; Variable: string; ClientTag: Pointer; var Value: Variant);
   protected
     {== TDataset overrides ==}
 
@@ -329,11 +331,16 @@ type
     procedure InternalOpen; override;
     procedure InternalClose; override;
 
+    { filter }
     procedure SetFiltered(Value: Boolean); override;
-    procedure SetFilterOptions(Value: TFilterOptions); override;
     procedure SetFilterText(const Value: string); override;
+    procedure SetFilterOptions(Value: TFilterOptions); override;
     procedure SetOnFilterRecord(const Value: TFilterRecordEvent); override;
-    procedure ActivateFilter(Value: Boolean);
+
+    { filter - own }
+    function  CanActivateFilter(): Boolean;
+    property  IsFilterActive: Boolean read FIsFilterActive write SetIsFilterActive;
+    function  FilterCanDisplayRecord(RecBuf: TRecordBuffer): Boolean;
 
     { miscs }
     procedure InternalInitFieldDefs; override;
@@ -571,6 +578,8 @@ end;
 
 
 
+
+
 { TMemTable }
 
 constructor TMemTable.Create(AOwner: TComponent);
@@ -595,7 +604,8 @@ begin
 
   FStatusOptions    := [usModified, usInserted, usUnmodified];
 
-  FFilterParser      := TFilterParser.Create(Self);
+  FFilterParser      := TFilterParser.Create();
+  FFilterParser.OnVariable := @OnFilterVariableValueEvent;
 
   FCurRecIndex      := -1;
 end;
@@ -1025,17 +1035,7 @@ begin
   if (Filtered <> Value) then
   begin
     inherited SetFiltered(Value);
-    ActivateFilter(Value);
-  end;
-end;
-
-procedure TMemTable.SetFilterOptions(Value: TFilterOptions);
-begin
-  if (FilterOptions <> Value) then
-  begin
-    inherited SetFilterOptions(Value);
-    ActivateFilter(not Filtered);  // de-activate
-    ActivateFilter(Filtered);      // and activate again
+    IsFilterActive := CanActivateFilter();
   end;
 end;
 
@@ -1044,53 +1044,143 @@ begin
   if (Filter <> Value) then
   begin
     inherited SetFilterText(Value);
-    ActivateFilter(Length(Value) > 0);
+    IsFilterActive := CanActivateFilter();
   end;
 end;
+
+procedure TMemTable.SetFilterOptions(Value: TFilterOptions);
+begin
+  if (FilterOptions <> Value) then
+  begin
+    inherited SetFilterOptions(Value);
+    IsFilterActive := CanActivateFilter();
+  end;
+end;
+
 procedure TMemTable.SetOnFilterRecord(const Value: TFilterRecordEvent);
 begin
   if (OnFilterRecord <> Value) then
   begin
     inherited SetOnFilterRecord(Value);
-    ActivateFilter(Assigned(OnFilterRecord));
+    IsFilterActive := CanActivateFilter();
   end;
-
 end;
 
-procedure TMemTable.ActivateFilter(Value: Boolean);
+function TMemTable.CanActivateFilter(): Boolean;
 begin
-  if IsCursorOpen() then
+  Result := Filtered and ((Length(Filter) > 0) or Assigned(OnFilterRecord));
+end;
+
+function TMemTable.FilterCanDisplayRecord(RecBuf: TRecordBuffer): Boolean;
+var
+  V : Variant;
+begin
+  V := FFilterParser.Evaluate(RecBuf);
+  Result := VarIsBool(V) and (V = True);
+end;
+
+procedure TMemTable.SetIsFilterActive(Value: Boolean);
+begin
+  if FIsFilterActive <> Value then
   begin
-    if not Value then
+    if IsCursorOpen() then
     begin
-      FModes := FModes - [cmFilter];
-
-      if Assigned(FFilterParser) then
-        FreeAndNil(FFilterParser);
-      if Assigned(FFilterBuffer) then
-         FFilterBuffer := nil;
-    end
-    else if Assigned(OnFilterRecord) or (Filtered and (Length(Filter) > 0)) then
-    begin
-      FModes := FModes + [cmFilter];
-
-      if Filtered and (Length(Filter) > 0) then
+      if not Value then
       begin
-        if not Assigned(FFilterParser) then
+        FIsFilterActive := False;
+        FModes := FModes - [cmFilter];
+
+
+        if Assigned(FFilterBuffer) then
+           FFilterBuffer := nil;
+      end
+      else if CanActivateFilter() then
+      begin
+        FIsFilterActive := True;
+        FModes := FModes + [cmFilter];
+
+        if (Length(Filter) > 0) then
         begin
-          FFilterParser := TFilterParser.Create(Self);
+          FFilterParser.CaseSensitive := foCaseInsensitive in FilterOptions;
+          FFilterParser.Parse(Filter);
         end;
-
-        FFilterParser.PartialMatch := not (foNoPartialCompare in FilterOptions);
-        FFilterParser.CaseInsensitive := foCaseInsensitive in FilterOptions;
-
-        FFilterParser.ParseExpression(Filter);
       end;
 
+      Rebuild();
+    end;
+  end;
+end;
+function TMemTable.CanDisplayRecord(RecBuf: TRecordBuffer): Boolean;
+var
+  RRS, RRE : Integer; // Range Results
+  TempStatusOptions : TUpdateStatusSet;
+  Accept : Boolean;
+  SavedState : TDataSetState;
+begin
+
+  if not FInitialized then
+    Exit(False);  //==>
+
+  { status }
+  if (cmStatus in FModes) then
+    TempStatusOptions := FStatusOptions
+  else
+    TempStatusOptions := [usModified, usInserted, usUnmodified];
+
+  if not (PRecInfo(RecBuf + FBookOfs)^.Status in TempStatusOptions) then
+    Exit(False);  //==>
+
+
+  { master-detail }
+  if (cmLink in FModes) then
+    if CompareRecords(FKeyBuffers[biMaster], RecBuf, FDetailFields, [loCaseInsensitive], smNone, bmNE) <> 0 then
+      Exit(False);  //==>
+
+
+  { range }
+  if (cmRange in FModes) then
+  begin
+    RRS := CompareRecords(RecBuf, FKeyBuffers[biRangeStart], FRangeFields, [loCaseInsensitive], smNone, bmNE);
+    RRE := CompareRecords(RecBuf, FKeyBuffers[biRangeEnd  ], FRangeFields, [loCaseInsensitive], smNone, bmNE);
+
+    case FRangeExclusive of
+      False : if not ((RRS >= 0) and (RRE <= 0)) then
+                Exit(False);  //==>
+      True  : if not ((RRS > 0) and (RRE < 0)) then
+                Exit(False);  //==>
+    end;
+  end;
+
+  { TODO: filter }
+  if (cmFilter in FModes) then
+  begin
+    if Assigned(OnFilterRecord) then
+    try
+      SavedState    := SetTempState(dsFilter);
+
+      FFilterBuffer := AllocRecordBuffer();
+      CopyRecord(RecBuf, FFilterBuffer);
+
+      Accept := True;
+      OnFilterRecord(Self, Accept);
+      if not Accept then
+        Exit(False);  //==>
+    finally
+      RestoreState(SavedState);
+      FreeRecordBuffer(FFilterBuffer);
+      FFilterBuffer := nil;
     end;
 
-    Rebuild();
+    if Assigned(FFilterParser) and (Length(Filter) > 0) then
+    begin
+      if not FilterCanDisplayRecord(RecBuf) then
+         Exit(False);  //==>
+    end;
+
+
   end;
+
+  Result := True;
 
 end;
 
@@ -1628,88 +1718,23 @@ begin
     CopyBlobs(SourceRecBuf, DestRecBuf);                 { copy blobs, if any }
 end;
 
-function TMemTable.CanDisplayRecord(RecBuf: TRecordBuffer): Boolean;
+procedure TMemTable.OnFilterVariableValueEvent(Sender: TObject; Variable: string; ClientTag: Pointer; var Value: Variant);
 var
-  RRS, RRE : Integer; // Range Results
-  TempStatusOptions : TUpdateStatusSet;
-  //Accept : Boolean;
-  //SavedState : TDataSetState;
+  FieldInfo: TFieldInfo;
+  FieldIndex: Integer;
 begin
 
-  Result := (FModes * [cmStatus, cmLink, cmRange, cmFilter] = []);
+  FieldInfo := FindInfoField(Variable);
+  FieldIndex := IndexOfFieldName(Variable);
 
-  if (not Result) and FInitialized then
-  begin
+  if not Assigned(FieldInfo) then
+    FFilterParser.Error(Format('Field not found: %s', [Variable]));
 
-    { status }
-    if (cmStatus in FModes) then
-      TempStatusOptions := FStatusOptions
-    else
-      TempStatusOptions := [usModified, usInserted, usUnmodified];
+  FieldIndex := FFields.IndexOf(FieldInfo);
 
-    if not (PRecInfo(RecBuf + FBookOfs)^.Status in TempStatusOptions) then
-      Exit; //==>
-
-
-    { master-detail }
-    if (cmLink in FModes) then
-      if CompareRecords(FKeyBuffers[biMaster], RecBuf, FDetailFields, [loCaseInsensitive], smNone, bmNE) <> 0 then
-        Exit; //==>
-
-
-    { range }
-    if (cmRange in FModes) then
-    begin
-      RRS := CompareRecords(RecBuf, FKeyBuffers[biRangeStart], FRangeFields, [loCaseInsensitive], smNone, bmNE);
-      RRE := CompareRecords(RecBuf, FKeyBuffers[biRangeEnd  ], FRangeFields, [loCaseInsensitive], smNone, bmNE);
-
-      case FRangeExclusive of
-        False : if not ((RRS >= 0) and (RRE <= 0)) then
-                  Exit; //==>
-        True  : if not ((RRS > 0) and (RRE < 0)) then
-                  Exit; //==>
-      end;
-    end;
-
-    { TODO: filter }
-    if (cmFilter in FModes) then
-    begin
-      {
-      SavedState    := SetTempState(dsFilter);
-
-      FFilterBuffer := AllocRecordBuffer();
-      CopyRecord(RecBuf, FFilterBuffer);
-
-      if Assigned(OnFilterRecord) then
-      begin
-        Accept := True;
-        OnFilterRecord(Self, Accept);
-        if not Accept then
-          Exit; //==>
-      end;
-
-      if Assigned(FFilterParser) and (Length(Filter) > 0) then
-      begin
-        if not FFilterParser.FilterRecord(RecBuf) then
-           Exit; //==>
-      end;
-
-      RestoreState(SavedState);
-      FreeRecordBuffer(FFilterBuffer);
-      FFilterBuffer := nil;
-      }
-
-      {
-      if Assigned(FFilterBuffer) then
-        if not FFilterParser.FilterRecord(RecBuf, FFilterBuffer, FilterParser_OnExtractFieldValue) then
-          Exit; //==>
-      }
-    end;
-
-
-    Result := True;
-  end;
+  Value := GetValueFromRecBuf(TRecordBuffer(ClientTag), FieldIndex);
 end;
+
 function TMemTable.GetActiveRecBuf(var RecBuf: TRecordBuffer): Boolean;
 begin
   case State of
@@ -2222,11 +2247,15 @@ begin
     FModes := FModes - [cmStatus];
     Sort();
 
+    First();
+
     Index := FRows.IndexOf(CurBuf);
     if Index <> -1 then
-      CurRecIndex := Index
-    else
-      First();
+    begin
+      CurRecIndex := Index;
+      Resync([rmExact, rmCenter]);
+      DoAfterScroll;
+    end;
 
   end;
 
@@ -2569,6 +2598,7 @@ begin
   end;
 
 end;
+
 function TMemTable.IsFieldBufferNull(FieldBuf: TFieldBuffer; Size: Integer): Boolean;
 var
   i : Integer;
@@ -2590,12 +2620,12 @@ end;
 
 function TMemTable.GetValueFromRecBuf(RecBuf: TRecordBuffer; const FieldIndex: Integer): Variant;
 var
-  FieldData : Pointer;
+  FieldBuf : Pointer;
 begin
-  FieldData  := RecBuf + FOffsets[FieldIndex];
+  FieldBuf  := RecBuf + FOffsets[FieldIndex];
 
-  if Boolean(PChar(FieldData)[0]) then
-    Result := GetValueFromFieldBuf(PChar(FieldData) + 1, FieldIndex)
+  if not IsFieldBufferNull(FieldBuf, FFieldBufferSizes[FieldIndex]) then
+    Result := GetValueFromFieldBuf(PChar(FieldBuf), FieldIndex)
   else
     Result := Null;
 end;
@@ -2797,6 +2827,8 @@ begin
     LoadDetailFieldList();
   end;
 end;
+
+
 
 procedure TMemTable.SetSortMode(Value: TMemTableSortMode);
 begin
